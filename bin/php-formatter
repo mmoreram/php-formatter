@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * This file is part of PHP Formatter package.
+ *
+ * (c) 2013-2014 Marc Morera <yuhu@mmoreram.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+require __DIR__ . '/../src/bootstrap.php';
+
+use PHPFormatter\Console\Application;
+
+error_reporting(-1);
+ini_set('display_errors', 1);
+
+// run the command application
+$application = new Application();
+$application->run();

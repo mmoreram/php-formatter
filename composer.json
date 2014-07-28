@@ -1,0 +1,42 @@
+{
+    "name": "mmoreram/php-formatter",
+    "type": "library",
+    "description": "PHP custom formatter",
+    "keywords": [
+        "php", "formatter"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marc Morera",
+            "email": "yuhu@mmoreram.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/console": "~2.5",
+        "symfony/process": "~2.5",
+        "symfony/finder": "~2.5",
+        "symfony/filesystem": "~2.5",
+        "symfony/yaml": "~2.5.0",
+        "symfony/event-dispatcher": "~2.5",
+        "symfony/property-access": "~2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1.4"
+    },
+    "bin": [
+        "bin/php-formatter"
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {"PHPFormatter\\": "src/PHPFormatter"}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

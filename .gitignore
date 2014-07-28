@@ -1,0 +1,6 @@
+/bin/*
+!/bin/php-formatter
+/vendor/
+/build
+*.phar
+phpunit.xml
