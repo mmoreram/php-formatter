@@ -2,3 +2,4 @@
 /bin/phpunit
 composer.phar
 phpunit.xml
+php-formatter.phar
