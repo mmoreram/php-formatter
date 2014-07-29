@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Copyright
+ */
+
+namespace PHPFormatter\Tests\Mocks;
+
+use Test1/Myclass1;
+use Test2/Myclass3;
+use Test1/Myclass2;
+use Test3/MyFolder/Myclass;
+
+use Test2/Myclass4, Test4/Myclass3,
+    Test1/MyFolder5/File as MyFile,
+    Test3/File;
+
+/**
+ * Class SimpleMock
+ */
+class SimpleMock
+{}

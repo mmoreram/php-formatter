@@ -34,6 +34,9 @@
     "autoload": {
         "psr-4": {"PHPFormatter\\": "src/PHPFormatter"}
     },
+    "autoload-dev": {
+        "psr-4": {"PHPFormatter\\Tests\\": "tests/PHPFormatter"}
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
