@@ -1,21 +1,6 @@
 PHP Formatter
 =============
 
-Installing
----
-
-You can get the PHPFormatter from Github public repository
-
-`git clone git@github.com:mmoreram/php-formatter.git | php bin/compile | sudo chmod +x php-formatter.phar`
-
-After this action, you should be able to execute the script
-
-`php-formatter.phar`
-
-You can also create a shortcut
-
-`sudo cp php-formatter.phar /usr/bin/php-formatter`
-
 Contributing
 ------------
 
