@@ -295,4 +295,3 @@ use Test3\\MyFolder\\Myclass;
         );
     }
 }
- 

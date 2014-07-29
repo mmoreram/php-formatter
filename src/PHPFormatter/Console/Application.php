@@ -12,15 +12,10 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
- 
+
 namespace PHPFormatter\Console;
 
 use PHPFormatter\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Application as BaseApplication;
 
 /**
@@ -56,4 +51,3 @@ class Application extends BaseApplication
         return $commands;
     }
 }
- 

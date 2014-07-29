@@ -12,10 +12,9 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
- 
+
 namespace PHPFormatter\Finder;
 
-use Iterator;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -41,4 +40,3 @@ class FileFinder
         return $finder;
     }
 }
- 

@@ -13,7 +13,7 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  * @author Aldo Chiecchia <zimage@tiscali.it>
  */
- 
+
 namespace PHPFormatter;
 
 /**
@@ -164,7 +164,6 @@ class UseSorter
         preg_match($regex, $data, $results);
 
         if (!isset($results[0])) {
-
             return false;
         }
 
@@ -188,16 +187,14 @@ class UseSorter
         /**
          * Trim all results of blank spaces and line breaks
          */
-        $namespaces = array_map(function($namespace) {
-
+        $namespaces = array_map(function ($namespace) {
             return trim($namespace);
         }, $namespaces);
 
         /**
          * If any position becomes empty, removes
          */
-        $namespaces = array_filter($namespaces, function($namespace) {
-
+        $namespaces = array_filter($namespaces, function ($namespace) {
             return !empty($namespace);
         });
 
@@ -217,7 +214,7 @@ class UseSorter
         $doubleEOL = PHP_EOL . PHP_EOL;
 
         $processedResult = $doubleEOL . implode($doubleEOL, array_map(
-            function($group) {
+            function ($group) {
                 return $this->renderGroup($group);
             }, $groups)
         ) . $doubleEOL;
@@ -273,7 +270,7 @@ class UseSorter
     {
         if ($this->sortType == self::SORT_TYPE_LENGTH) {
 
-            usort($group, function($a, $b) {
+            usort($group, function ($a, $b) {
 
                 $cmp = strlen($b) - strlen($a);
 
@@ -289,7 +286,7 @@ class UseSorter
             });
         } elseif ($this->sortType == self::SORT_TYPE_ALPHABETIC) {
 
-            usort($group, function($a, $b) {
+            usort($group, function ($a, $b) {
                 $a = strtolower($a);
                 $b = strtolower($b);
 
@@ -321,17 +318,16 @@ class UseSorter
     private function renderGroup(array $group)
     {
         if ($this->groupType === self::GROUP_TYPE_EACH) {
-
-            return implode(PHP_EOL, array_map(function($namespace) {
+            return implode(PHP_EOL, array_map(function ($namespace) {
 
                 return 'use ' . $namespace . ';';
             }, $group));
         } elseif ($this->groupType === self::GROUP_TYPE_ONE) {
 
             $group = implode(',' . PHP_EOL . '    ', $group);
+
             return 'use ' . $group . ';';
         }
     }
 
 }
- 
