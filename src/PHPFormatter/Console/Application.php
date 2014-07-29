@@ -15,13 +15,13 @@
  
 namespace PHPFormatter\Console;
 
-use Symfony\Component\Console\Application as BaseApplication;
 use PHPFormatter\Command;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Application as BaseApplication;
 
 /**
  * Class Application

@@ -15,14 +15,14 @@
 
 namespace PHPFormatter\Command;
 
-use PHPFormatter\Finder\FileFinder;
 use PHPFormatter\UseSorter;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use PHPFormatter\Finder\FileFinder;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 
 /**
  * Class UseSortCommand
@@ -35,7 +35,7 @@ class UseSortCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName('php-formatter:use:sort')
+            ->setName('use:sort')
             ->setDescription('Sort Use statements')
             ->addArgument(
                 'path',
@@ -68,6 +68,12 @@ class UseSortCommand extends BaseCommand
                 InputOption::VALUE_OPTIONAL,
                 "Type of grouping",
                 UseSorter::GROUP_TYPE_EACH
+            )
+            ->addOption(
+                'dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                "Just print the result, nothing is overwritten"
             );
     }
 
@@ -84,6 +90,7 @@ class UseSortCommand extends BaseCommand
         $sortType = $input->getOption('sort-type');
         $sortDirection = $input->getOption('sort-direction');
         $groupType = $input->getOption('group-type');
+        $dryRun = $input->getOption('dry-run');
 
         if (null !== $path) {
 
@@ -103,14 +110,28 @@ class UseSortCommand extends BaseCommand
         $finder = new FileFinder();
         $files = $finder->findPHPFilesByPath($path);
 
+        if ($dryRun) {
+
+            $output->writeln('This process is Dry-run');
+            $output->writeln('');
+        }
+
         foreach ($files as $file) {
 
             $data = file_get_contents($file);
             $result = $useSorter->sort($data);
 
-            echo $result;
-            die();
-            //file_put_contents($file, $data);
+            if ($result === false || $data === $result) {
+
+                continue;
+            }
+
+            $output->writeln($file);
+
+            if (!$dryRun) {
+
+                file_put_contents($file, $result);
+            }
         }
     }
 }

@@ -156,13 +156,18 @@ class UseSorter
      *
      * @param string $data file data
      *
-     * @return string output file data
+     * @return mixed Data processed or false if no use block has been found
      */
     public function sort($data)
     {
-        $regex = '/(\s*(?:(?:\s+use\s+?[\w\\/\,\s]+?;)+)\s+)/s';
+        $regex = '/(\s*(?:(?:\s+use\s+?[\w\\\\\,\s]+?;)+)\s+)/s';
         preg_match($regex, $data, $results);
-        var_dump($results);die();
+
+        if (!isset($results[0])) {
+
+            return false;
+        }
+
         $result = $results[0];
         $blocks = explode(';', $result);
         $namespaces = array();
@@ -217,7 +222,7 @@ class UseSorter
             }, $groups)
         ) . $doubleEOL;
 
-        return str_replace($result, $processedResult, $data);die();
+        return str_replace($result, $processedResult, $data);
     }
 
     /**
@@ -270,14 +275,35 @@ class UseSorter
 
             usort($group, function($a, $b) {
 
-                return strlen($b) - strlen($a);
+                $cmp = strlen($b) - strlen($a);
+
+                if ($cmp === 0) {
+
+                    $a = strtolower($a);
+                    $b = strtolower($b);
+
+                    $cmp = strcmp($b, $a);
+                }
+
+                return $cmp;
             });
         } elseif ($this->sortType == self::SORT_TYPE_ALPHABETIC) {
 
-            sort($group, SORT_STRING);
+            usort($group, function($a, $b) {
+                $a = strtolower($a);
+                $b = strtolower($b);
+
+                $cmp = strcmp($b, $a);
+                if ($cmp === 0) {
+
+                    $cmp = strlen($b) - strlen($a);
+                }
+
+                return $cmp;
+            });
         }
 
-        if ($this->sortDirection == self::SORT_DIRECTION_DESC) {
+        if ($this->sortDirection == self::SORT_DIRECTION_ASC) {
 
             $group = array_reverse($group);
         }
