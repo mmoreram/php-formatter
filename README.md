@@ -18,11 +18,41 @@ you include `~/.composer/vendor/bin` in $PATH as shown [here](http://getcomposer
 $ composer global update mmoreram/php-formatter
 ```
 
-Finally you can copy the `.phar` file as a global script
+### .phar file
+
+You can also use already last built `.phar`.
 
 ``` bash
-$ mv php-formatter.phar /usr/local/bin/php-formatter
+$ git clone git@github.com:mmoreram/php-formatter.git
+$ cd php-formatter
+$ php build/php-formatter.phar
 ```
+
+You can copy the `.phar` file as a global script
+
+``` bash
+$ cp build/php-formatter.phar /usr/local/bin/php-formatter
+```
+
+### Compile
+
+Finally you can also compile your own version of the package
+
+``` bash
+$ git clone git@github.com:mmoreram/php-formatter.git
+$ cd php-formatter
+$ composer update
+$ php bin/compile
+$ sudo chmod +x php-formatter.phar
+$ php-formatter.phar
+```
+
+You can copy the `.phar` file as a global script
+
+``` bash
+$ cp php-formatter.phar /usr/local/bin/php-formatter
+```
+
 
 ## Commands
 
