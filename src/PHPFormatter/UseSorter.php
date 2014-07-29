@@ -212,11 +212,11 @@ class UseSorter
 
         $doubleEOL = PHP_EOL . PHP_EOL;
 
-        $processedResult = $doubleEOL . implode($doubleEOL, array_map(
+        $processedResult = $doubleEOL . trim(implode($doubleEOL, array_map(
             function ($group) {
                 return $this->renderGroup($group);
             }, $groups)
-        ) . $doubleEOL;
+        )) . $doubleEOL;
 
         return str_replace($result, $processedResult, $data);
     }
