@@ -198,11 +198,11 @@ use Mmoreram\MyClass;
 use Symfony\OneClass;
 ```
 
-You can also define the direction of the sorting. This can be ascendent
+You can also define the direction of the sorting. This can be ascending
 ***(default value)***
 
 ``` bash
-$ php-formatter use:sort src/ --sort-direction="length"
+$ php-formatter use:sort src/ --sort-direction="asc"
 ```
 
 This command will sort the code like this
@@ -216,10 +216,10 @@ use Symfony\AnotherClass;
 use Symfony\OneClass;
 ```
 
-or descendent
+or descending
 
 ``` bash
-$ php-formatter use:sort src/ --sort-direction="length"
+$ php-formatter use:sort src/ --sort-direction="desc"
 ```
 
 This command will sort the code like this
