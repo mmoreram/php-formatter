@@ -13,22 +13,33 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace PHPFormatter\Command;
+namespace Mmoreram\PHPFormatter\Command;
 
-use PHPFormatter\Finder\FileFinder;
-use PHPFormatter\UseSorter;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Exception;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+use Mmoreram\PHPFormatter\Finder\ConfigFinder;
+use Mmoreram\PHPFormatter\Finder\FileFinder;
+use Mmoreram\PHPFormatter\Loader\ConfigLoader;
+use Mmoreram\PHPFormatter\Sorter\UseSorter;
+
 /**
  * Class UseSortCommand
  */
-class UseSortCommand extends BaseCommand
+class UseSortCommand extends Command
 {
+    /**
+     * @var string
+     *
+     * Command name
+     */
+    const COMMAND_NAME = 'use-sort';
+
     /**
      * configure
      */
@@ -52,22 +63,26 @@ class UseSortCommand extends BaseCommand
                 'sort-type',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Sort type",
-                UseSorter::SORT_TYPE_ALPHABETIC
+                "Sort type"
             )
             ->addOption(
                 'sort-direction',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Sort direction",
-                UseSorter::SORT_DIRECTION_ASC
+                "Sort direction"
             )
             ->addOption(
                 'group-type',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Type of grouping",
-                UseSorter::GROUP_TYPE_EACH
+                "Type of grouping"
+            )
+            ->addOption(
+                '--config',
+                '-c',
+                InputOption::VALUE_OPTIONAL,
+                "Config file directory",
+                getcwd()
             )
             ->addOption(
                 'dry-run',
@@ -78,44 +93,123 @@ class UseSortCommand extends BaseCommand
     }
 
     /**
+     * Execute command
+     *
      * @param InputInterface  $input  Input
      * @param OutputInterface $output Output
      *
      * @return int|null|void
+     *
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $verbose = $output->getVerbosity();
         $path = $input->getArgument('path');
-        $groups = $input->getOption('group');
-        $sortType = $input->getOption('sort-type');
-        $sortDirection = $input->getOption('sort-direction');
-        $groupType = $input->getOption('group-type');
         $dryRun = $input->getOption('dry-run');
+        $fileFinder = new FileFinder;
+        $configLoader = new ConfigLoader;
+        $configFinder = new ConfigFinder;
 
-        if (null !== $path) {
+        /**
+         * This section is just for finding the right values to work with in
+         * this execution.
+         *
+         * $options array will have, after this block, all these values
+         */
+        $configPath = rtrim($input->getOption('config'), DIRECTORY_SEPARATOR);
 
-            $filesystem = new Filesystem();
-            if (!$filesystem->isAbsolutePath($path)) {
-                $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        $options = $configLoader->loadConfigValues(
+            self::COMMAND_NAME,
+            $configFinder->findConfigFile($configPath),
+            array(
+                'group' => $input->getOption('group'),
+                'group-type' => $input->getOption('group-type'),
+                'sort-type' => $input->getOption('sort-type'),
+                'sort-direction' => $input->getOption('sort-direction')
+            ),
+            array(
+                'group' => array('_main'),
+                'group-type' => UseSorter::GROUP_TYPE_EACH,
+                'sort-type' => UseSorter::SORT_TYPE_ALPHABETIC,
+                'sort-direction' => UseSorter::SORT_DIRECTION_ASC
+            )
+        );
+
+        /**
+         * Building the real directory or file to work in
+         */
+        $filesystem = new Filesystem();
+        if (!$filesystem->isAbsolutePath($path)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        }
+
+        if (!is_file($path) && !is_dir($path)) {
+
+            throw new Exception('Directory or file "' . $path . '" does not exist');
+        }
+
+        /**
+         * Dry-run message
+         */
+        if ($dryRun && $verbose >= OutputInterface::VERBOSITY_VERBOSE) {
+
+            $output->writeln('# This process has been executed in mode dry-run');
+        }
+
+        if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
+
+            $output->writeln('# Executing process in ' . $path);
+        }
+
+        /**
+         * Creates the new UseSorter file, given config values
+         */
+        $useSorter = new UseSorter();
+        $useSorter
+            ->setGroups($options['group'])
+            ->setGroupType($options['group-type'])
+            ->setSortType($options['sort-type'])
+            ->setSortDirection($options['sort-direction']);
+
+        $files = $fileFinder->findPHPFilesByPath($path);
+
+        /**
+         * If verbose level is higher or equal than -vv, we print the config
+         * file data, if is not empty.
+         */
+        if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
+
+            $output->writeln('# Executing process with this configuration');
+            if (!empty($options['group'])) {
+
+                foreach ($options['group'] as $group) {
+
+                    $output->writeln('#   --group="' . $group . '"');
+                }
+            }
+
+            if (!empty($options['group-type'])) {
+
+                $output->writeln('#   --group-type="' . $options['group-type'] . '"');
+            }
+
+            if (!empty($options['sort-type'])) {
+
+                $output->writeln('#   --sort-type="' . $options['sort-type'] . '"');
+            }
+
+            if (!empty($options['sort-direction'])) {
+
+                $output->writeln('#   --sort-direction="' . $options['sort-direction'] . '"');
             }
         }
 
-        $useSorter = new UseSorter();
-        $useSorter
-            ->setGroups($groups)
-            ->setSortType($sortType)
-            ->setSortDirection($sortDirection)
-            ->setGroupType($groupType);
+        $output->writeln('#');
 
-        $finder = new FileFinder();
-        $files = $finder->findPHPFilesByPath($path);
-
-        if ($dryRun) {
-
-            $output->writeln('This process is Dry-run');
-            $output->writeln('');
-        }
-
+        /**
+         * Each found php file is processed
+         */
         foreach ($files as $file) {
 
             $data = file_get_contents($file);
@@ -126,7 +220,10 @@ class UseSortCommand extends BaseCommand
                 continue;
             }
 
-            $output->writeln($file);
+            if ($verbose >= OutputInterface::VERBOSITY_NORMAL) {
+
+                $output->writeln('# ' . $file);
+            }
 
             if (!$dryRun) {
 

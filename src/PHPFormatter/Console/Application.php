@@ -13,10 +13,11 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace PHPFormatter\Console;
+namespace Mmoreram\PHPFormatter\Console;
 
-use PHPFormatter\Command;
 use Symfony\Component\Console\Application as BaseApplication;
+
+use Mmoreram\PHPFormatter\Command;
 
 /**
  * Class Application

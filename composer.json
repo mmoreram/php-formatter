@@ -32,10 +32,10 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-4": {"PHPFormatter\\": "src/PHPFormatter"}
+        "psr-4": {"Mmoreram\\PHPFormatter\\": "src/PHPFormatter"}
     },
     "autoload-dev": {
-        "psr-4": {"PHPFormatter\\Tests\\": "tests/PHPFormatter"}
+        "psr-4": {"Mmoreram\\PHPFormatter\\Tests\\": "tests/PHPFormatter"}
     },
     "extra": {
         "branch-alias": {

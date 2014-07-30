@@ -13,7 +13,7 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace PHPFormatter;
+namespace Mmoreram\PHPFormatter\Sorter;
 
 /**
  * Class UseSorter
