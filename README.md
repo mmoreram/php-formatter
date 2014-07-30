@@ -1,5 +1,9 @@
 PHP Formatter
 =============
+[![Build Status](https://travis-ci.org/mmoreram/php-formatter.png?branch=master)](https://travis-ci.org/mmoreram/php-formatter)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mmoreram/php-formatter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mmoreram/php-formatter/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/mmoreram/php-formatter/v/stable.png)](https://packagist.org/packages/mmoreram/php-formatter)
+[![Latest Unstable Version](https://poser.pugx.org/mmoreram/php-formatter/v/unstable.png)](https://packagist.org/packages/mmoreram/php-formatter)
 
 ## Install
 
@@ -94,6 +98,16 @@ process.
 * option: --group-type=***one***|***each***
 * option: --sort-type=***alph***|***length***
 * option: --sort-direction=***asc***|***desc***
+* option: --dry-run [***no value***]
+
+#### Dry run
+
+You can use this tool just to test the files will be modified, using option
+--dry-run
+
+``` bash
+$ php-formatter use:sort src/ --dry-run
+```
 
 #### Group
 

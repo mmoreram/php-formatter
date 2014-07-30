@@ -16,8 +16,8 @@
 
 namespace PHPFormatter\Compiler;
 
-use Phar;
 use DateTime;
+use Phar;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;

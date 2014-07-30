@@ -15,14 +15,14 @@
 
 namespace PHPFormatter\Command;
 
-use PHPFormatter\UseSorter;
 use PHPFormatter\Finder\FileFinder;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputOption;
+use PHPFormatter\UseSorter;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UseSortCommand
