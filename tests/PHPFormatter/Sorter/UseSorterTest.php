@@ -13,10 +13,11 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace PHPFormatter\Tests;
+namespace Mmoreram\PHPFormatter\Tests\Sorter;
 
-use PHPFormatter\UseSorter;
 use PHPUnit_Framework_TestCase;
+
+use Mmoreram\PHPFormatter\Sorter\UseSorter;
 
 /**
  * Class UseSorterTest
@@ -43,7 +44,9 @@ class UseSorterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->useSorter = new UseSorter();
-        $this->data = file_get_contents(dirname(__FILE__) . '/Mocks/SimpleMock.php.mock');
+        $this->data = file_get_contents(
+            dirname(__FILE__) . '/../Mocks/SimpleMock.php.mock'
+        );
 
     }
 

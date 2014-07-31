@@ -57,6 +57,33 @@ You can copy the `.phar` file as a global script
 $ cp php-formatter.phar /usr/local/bin/php-formatter
 ```
 
+## Config
+
+You can place a file named `.formatter.yml` in the root of your project. In
+every command execution, this will be the priority of the definitions.
+
+If an option is set in the command, this will be used. Otherwise, if is defined
+in a found config file, this will be used. Otherwise, default value will be
+used.
+
+This is the config reference
+
+``` yml
+use-sort:
+    group:
+        - _main
+        - Mmoreram
+    group-type: each
+    sort-type: alph
+    sort-direction: asc
+```
+
+you can also define where to search the `.formatter.yml` file using the
+`--config|-c` option
+
+``` bash
+$ php-formatter use:sort src/ --config="src/"
+```
 
 ## Commands
 

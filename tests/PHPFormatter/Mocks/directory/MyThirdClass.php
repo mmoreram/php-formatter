@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 
 /**
@@ -14,13 +13,12 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-require __DIR__ . '/../src/bootstrap.php';
+namespace Mmoreram\PHPFormatter\Tests\Mocks\Directory;
 
-use Mmoreram\PHPFormatter\Console\Application;
+/**
+ * Class MyThirdClass
+ */
+class MyThirdClass
+{
 
-error_reporting(-1);
-ini_set('display_errors', 1);
-
-// run the command application
-$application = new Application();
-$application->run();
+}

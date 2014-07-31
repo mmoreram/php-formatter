@@ -13,7 +13,7 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace PHPFormatter\Finder;
+namespace Mmoreram\PHPFormatter\Finder;
 
 use Symfony\Component\Finder\Finder;
 
@@ -27,7 +27,7 @@ class FileFinder
      *
      * @param string $path Path
      *
-     * @return Finder
+     * @return Finder Finder iterable object with all PHP found files in path
      */
     public function findPHPFilesByPath($path)
     {

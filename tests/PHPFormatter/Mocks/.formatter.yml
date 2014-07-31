@@ -1,0 +1,8 @@
+use-sort:
+    group:
+        - Symfony
+        - _main
+        - Mmoreram
+    group-type: each
+    sort-type: alph
+    sort-direction: desc
