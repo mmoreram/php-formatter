@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.3.3",
         "symfony/console": "~2.5",
         "symfony/process": "~2.5",
         "symfony/finder": "~2.5",
