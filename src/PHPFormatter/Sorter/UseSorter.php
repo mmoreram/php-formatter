@@ -155,7 +155,7 @@ class UseSorter
      *
      * @param string $data file data
      *
-     * @return mixed Data processed or false if no use block has been found
+     * @return false|string Data processed or false if no use block has been found
      */
     public function sort($data)
     {
