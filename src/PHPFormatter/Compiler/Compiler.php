@@ -18,6 +18,7 @@ namespace Mmoreram\PHPFormatter\Compiler;
 use DateTime;
 use Phar;
 use RuntimeException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
@@ -44,106 +45,34 @@ class Compiler
      * Compiles composer into a single phar file
      *
      * @throws RuntimeException
-     *
-     * @param string $pharFile The full path to the file to create
      */
-    public function compile($pharFile = 'php-formatter.phar')
+    public function compile()
     {
-        if (file_exists($pharFile)) {
-            unlink($pharFile);
+        $pharFilePath = dirname(__FILE__) . '/../../../build/php-formatter.phar';
+
+        if (file_exists($pharFilePath)) {
+            unlink($pharFilePath);
         }
 
-        /**
-         * Loading versions
-         */
-        $process = new Process('git log --pretty="%H" -n1 HEAD', __DIR__);
-        if ($process->run() != 0) {
-            throw new \RuntimeException('Can\'t run git log. You must ensure to run compile from php-formatter git repository clone and that git binary is available.');
-        }
-        $this->version = trim($process->getOutput());
-
-        $process = new Process('git log -n1 --pretty=%ci HEAD', __DIR__);
-        if ($process->run() != 0) {
-            throw new \RuntimeException('Can\'t run git log. You must ensure to run compile from php-formatter git repository clone and that git binary is available.');
-        }
-        $date = new \DateTime(trim($process->getOutput()));
-        $date->setTimezone(new \DateTimeZone('UTC'));
-        $this->versionDate = $date->format('Y-m-d H:i:s');
-
-        $process = new Process('git describe --tags HEAD');
-        if ($process->run() == 0) {
-            $this->version = trim($process->getOutput());
-        }
+        $this->loadVersion();
 
         /**
          * Creating phar object
          */
-        $phar = new Phar($pharFile, 0, 'php-formatter.phar');
+        $phar = new Phar($pharFilePath, 0, 'php-formatter.phar');
         $phar->setSignatureAlgorithm(\Phar::SHA1);
 
         $phar->startBuffering();
 
-        /**
-         * All *.php files
-         */
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->ignoreVCS(true)
-            ->name('*.php')
-            ->notName('Compiler.php')
-            ->notName('ClassLoader.php')
-            ->in(realpath(__DIR__ . '/../../../src'));
-
-        foreach ($finder as $file) {
-            $this->addFile($phar, $file);
-        }
-
-        /**
-         * All vendors (ignoring tests)
-         */
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->ignoreVCS(true)
-            ->name('*.php')
-            ->exclude('Tests')
-            ->in(realpath(__DIR__ . '/../../../vendor/symfony/'));
-
-        foreach ($finder as $file) {
-            $this->addFile($phar, $file);
-        }
-
-        /**
-         * Adding composer vendor files
-         */
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/autoload.php'));
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/autoload_namespaces.php'));
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/autoload_psr4.php'));
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/autoload_classmap.php'));
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/autoload_real.php'));
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/ClassLoader.php'));
-
-        if (file_exists(__DIR__ . '/../../../vendor/composer/include_paths.php')) {
-            $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../vendor/composer/include_paths.php'));
-        }
-
-        /**
-         * Adding bin
-         */
-        $this->addBin($phar);
-
-        /**
-         * Adding stubs
-         */
-        $phar->setStub($this->getStub());
+        $this
+            ->addPHPFiles($phar)
+            ->addVendorFiles($phar)
+            ->addComposerVendorFiles($phar)
+            ->addBin($phar)
+            ->addStub($phar)
+            ->addLicense($phar);
 
         $phar->stopBuffering();
-
-        /**
-         * Adding LICENSE
-         */
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../LICENSE'), false);
 
         unset($phar);
     }
@@ -151,11 +80,17 @@ class Compiler
     /**
      * Add a file into the phar package
      *
-     * @param Phar   $phar  Phar object
-     * @param string $file  File to add
-     * @param bool   $strip strip
+     * @param Phar        $phar  Phar object
+     * @param SplFileInfo $file  File to add
+     * @param bool        $strip strip
+     *
+     * @return Compiler self Object
      */
-    protected function addFile(Phar $phar, $file, $strip = true)
+    protected function addFile(
+        Phar $phar,
+        SplFileInfo $file,
+        $strip = true
+    )
     {
         $path = strtr(str_replace(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $file->getRealPath()), '\\', '/');
         $content = file_get_contents($file);
@@ -171,18 +106,24 @@ class Compiler
         }
 
         $phar->addFromString($path, $content);
+
+        return $this;
     }
 
     /**
      * Add bin into Phar
      *
      * @param Phar $phar Phar
+     *
+     * @return Compiler self Object
      */
     protected function addBin(Phar $phar)
     {
         $content = file_get_contents(__DIR__ . '/../../../bin/php-formatter');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
         $phar->addFromString('bin/php-formatter', $content);
+
+        return $this;
     }
 
     /**
@@ -220,9 +161,9 @@ class Compiler
         return $output;
     }
 
-    protected function getStub()
+    protected function addStub(Phar $phar)
     {
-        return <<<'EOF'
+        $stub = <<<'EOF'
 #!/usr/bin/env php
 <?php
 
@@ -245,5 +186,138 @@ require 'phar://php-formatter.phar/bin/php-formatter';
 
 __HALT_COMPILER();
 EOF;
+        $phar->setStub($stub);
+
+        return $this;
+    }
+
+    /**
+     * Add php files
+     *
+     * @param Phar $phar Phar instance
+     *
+     * @return Compiler self Object
+     */
+    private function addPHPFiles(Phar $phar)
+    {
+        /**
+         * All *.php files
+         */
+        $finder = new Finder();
+        $finder
+            ->files()
+            ->ignoreVCS(true)
+            ->name('*.php')
+            ->notName('Compiler.php')
+            ->notName('ClassLoader.php')
+            ->in(realpath(__DIR__ . '/../../../src'));
+
+        foreach ($finder as $file) {
+
+            $this->addFile($phar, $file);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add vendor files
+     *
+     * @param Phar $phar Phar instance
+     *
+     * @return Compiler self Object
+     */
+    private function addVendorFiles(Phar $phar)
+    {
+        $vendorPath = __DIR__ . '/../../../vendor/';
+
+        /**
+         * All *.php files
+         */
+        $finder = new Finder();
+        $finder
+            ->files()
+            ->ignoreVCS(true)
+            ->name('*.php')
+            ->exclude('Tests')
+            ->in(realpath($vendorPath . 'symfony/'));
+
+        foreach ($finder as $file) {
+
+            $this->addFile($phar, $file);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add composer vendor files
+     *
+     * @param Phar $phar Phar
+     *
+     * @return Compiler self Object
+     */
+    private function addComposerVendorFiles(Phar $phar)
+    {
+        $vendorPath = __DIR__ . '/../../../vendor/';
+
+        /**
+         * Adding composer vendor files
+         */
+        $this
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'autoload.php'))
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_namespaces.php'))
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_psr4.php'))
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_classmap.php'))
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_real.php'))
+            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/ClassLoader.php'));
+
+        if (file_exists($vendorPath . 'composer/include_paths.php')) {
+
+            $this->addFile($phar, new \SplFileInfo($vendorPath . 'composer/include_paths.php'));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add license
+     *
+     * @param Phar $phar Phar
+     *
+     * @return Compiler self Object
+     */
+    private function addLicense(Phar $phar)
+    {
+        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../LICENSE'), false);
+
+        return $this;
+    }
+
+    /**
+     * Load versions
+     */
+    private function loadVersion()
+    {
+        $process = new Process('git log --pretty="%H" -n1 HEAD', __DIR__);
+        if ($process->run() != 0) {
+            throw new \RuntimeException('Can\'t run git log. You must ensure to run compile from php-formatter git repository clone and that git binary is available.');
+        }
+        $this->version = trim($process->getOutput());
+
+        $process = new Process('git log -n1 --pretty=%ci HEAD', __DIR__);
+        if ($process->run() != 0) {
+            throw new \RuntimeException('Can\'t run git log. You must ensure to run compile from php-formatter git repository clone and that git binary is available.');
+        }
+        $date = new \DateTime(trim($process->getOutput()));
+        $date->setTimezone(new \DateTimeZone('UTC'));
+        $this->versionDate = $date->format('Y-m-d H:i:s');
+
+        $process = new Process('git describe --tags HEAD');
+        if ($process->run() == 0) {
+            $this->version = trim($process->getOutput());
+        }
+
+        return $this;
     }
 }

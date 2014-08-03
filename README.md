@@ -47,14 +47,14 @@ $ git clone git@github.com:mmoreram/php-formatter.git
 $ cd php-formatter
 $ composer update
 $ php bin/compile
-$ sudo chmod +x php-formatter.phar
-$ php-formatter.phar
+$ sudo chmod +x build/php-formatter.phar
+$ build/php-formatter.phar
 ```
 
 You can copy the `.phar` file as a global script
 
 ``` bash
-$ cp php-formatter.phar /usr/local/bin/php-formatter
+$ cp build/php-formatter.phar /usr/local/bin/php-formatter
 ```
 
 ## Config

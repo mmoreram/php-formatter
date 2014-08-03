@@ -163,7 +163,7 @@ class UseSortCommand extends Command
      *
      * @return array Config array
      */
-    public function getUsableConfig(InputInterface $input)
+    private function getUsableConfig(InputInterface $input)
     {
         $configLoader = new ConfigLoader;
         $configFinder = new ConfigFinder;
@@ -203,7 +203,7 @@ class UseSortCommand extends Command
      *
      * @return UseSortCommand self Object
      */
-    public function printDryRunMessage(
+    private function printDryRunMessage(
         InputInterface $input,
         OutputInterface $output,
         $path
@@ -236,7 +236,7 @@ class UseSortCommand extends Command
      *
      * @return UseSortCommand self Object
      */
-    public function printConfigUsed(
+    private function printConfigUsed(
         OutputInterface $output,
         array $options
     )
@@ -289,7 +289,7 @@ class UseSortCommand extends Command
      *
      * @return UseSortCommand self Object
      */
-    public function parseAndFixFiles(
+    private function parseAndFixFiles(
         InputInterface $input,
         OutputInterface $output,
         IteratorAggregate $files,
@@ -335,7 +335,7 @@ class UseSortCommand extends Command
      *
      * @return UseSorter Use sorter instance
      */
-    public function createUseSorter(array $options)
+    private function createUseSorter(array $options)
     {
         /**
          * Creates the new UseSorter file, given config values
