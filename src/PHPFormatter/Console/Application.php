@@ -48,6 +48,7 @@ class Application extends BaseApplication
     {
         $commands = parent::getDefaultCommands();
         $commands[] = new Command\UseSortCommand();
+        $commands[] = new Command\HeaderCommand();
 
         return $commands;
     }

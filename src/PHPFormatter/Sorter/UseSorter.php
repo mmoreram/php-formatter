@@ -15,10 +15,12 @@
 
 namespace Mmoreram\PHPFormatter\Sorter;
 
+use Mmoreram\PHPFormatter\Sorter\Interfaces\SorterInterface;
+
 /**
  * Class UseSorter
  */
-class UseSorter
+class UseSorter implements SorterInterface
 {
     /**
      * @var integer
@@ -151,9 +153,9 @@ class UseSorter
     }
 
     /**
-     * Sort use statements given a PHP file
+     * Sort any piece of code given as parameter
      *
-     * @param string $data file data
+     * @param string $data Data
      *
      * @return false|string Data processed or false if no use block has been found
      */
@@ -213,10 +215,10 @@ class UseSorter
         $doubleEOL = PHP_EOL . PHP_EOL;
 
         $processedResult = $doubleEOL . trim(implode($doubleEOL, array_map(
-            function ($group) {
-                return $this->renderGroup($group);
-            }, $groups)
-        )) . $doubleEOL;
+                    function ($group) {
+                        return $this->renderGroup($group);
+                    }, $groups)
+            )) . $doubleEOL;
 
         return str_replace($result, $processedResult, $data);
     }
