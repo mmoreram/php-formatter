@@ -47,7 +47,7 @@ class UseSortCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('use:sort')
+            ->setName('formatter:use:sort')
             ->setDescription('Sort Use statements')
             ->addArgument(
                 'path',
