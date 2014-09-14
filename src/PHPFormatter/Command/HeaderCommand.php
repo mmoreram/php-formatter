@@ -100,6 +100,11 @@ class HeaderCommand extends Command
             $configFinder->findConfigFile($configPath)
         );
 
+        if (empty($header)) {
+
+            throw new Exception('Header definition must be defined in .formatter.yml file under');
+        }
+
         /**
          * Building the real directory or file to work in
          */
