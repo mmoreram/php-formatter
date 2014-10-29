@@ -51,7 +51,7 @@ $ cp build/php-formatter.phar /usr/local/bin/php-formatter
 
 ### Compile
 
-Finally you can also compile your own version of the package
+Finally you can also compile your own version of the package. ( You need set `phar.readonly = Off` in your php.ini ).
 
 ``` bash
 $ git clone git@github.com:mmoreram/php-formatter.git
