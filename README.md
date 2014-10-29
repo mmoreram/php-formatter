@@ -6,7 +6,7 @@ PHP Formatter
 [![Latest Unstable Version](https://poser.pugx.org/mmoreram/php-formatter/v/unstable.png)](https://packagist.org/packages/mmoreram/php-formatter)
 
 This PHP formatter aims to provide you some bulk actions for you PHP projects to
-ensure their consistency. Any of them fixes PSR rules. If you want to fix PSR
+ensure their consistency. None of them fixes PSR rules. If you want to fix PSR
 rules, please check [fabpot/php-cs-fixer](https://github.com/fabpot/PHP-CS-Fixer).
 
 ## Tags
