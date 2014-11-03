@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -17,8 +17,8 @@ namespace Mmoreram\PHPFormatter\Tests\Loader;
 
 use PHPUnit_Framework_TestCase;
 
-use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 use Mmoreram\PHPFormatter\Command\UseSortCommand;
+use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 
 /**
  * Class ConfigLoaderTest

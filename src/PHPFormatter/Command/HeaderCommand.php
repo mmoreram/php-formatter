@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -83,9 +83,9 @@ class HeaderCommand extends Command
         $verbose = $output->getVerbosity();
         $path = $input->getArgument('path');
         $dryRun = $input->getOption('dry-run');
-        $fileFinder = new FileFinder;
-        $configLoader = new ConfigLoader;
-        $configFinder = new ConfigFinder;
+        $fileFinder = new FileFinder();
+        $configLoader = new ConfigLoader();
+        $configFinder = new ConfigFinder();
 
         /**
          * This section is just for finding the right values to work with in
