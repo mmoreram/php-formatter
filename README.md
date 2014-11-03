@@ -89,7 +89,7 @@ use-sort:
     sort-direction: asc
 
 header: |
-    /**
+    /*
      * This file is part of the php-formatter package
      *
      * Copyright (c) 2014 Marc Morera
@@ -322,7 +322,7 @@ Your PHP Header definition must have this format.
 
 ``` yml
 header: |
-    /**
+    /*
      * This file is part of the php-formatter package
      *
      * Copyright (c) 2014 Marc Morera
