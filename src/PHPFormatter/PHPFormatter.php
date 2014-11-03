@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -142,7 +142,7 @@ class UseSortCommand extends Command
             $options
         );
 
-        $fileFinder = new FileFinder;
+        $fileFinder = new FileFinder();
         $files = $fileFinder->findPHPFilesByPath($path);
 
         /**
@@ -165,8 +165,8 @@ class UseSortCommand extends Command
      */
     private function getUsableConfig(InputInterface $input)
     {
-        $configLoader = new ConfigLoader;
-        $configFinder = new ConfigFinder;
+        $configLoader = new ConfigLoader();
+        $configFinder = new ConfigFinder();
 
         /**
          * This section is just for finding the right values to work with in

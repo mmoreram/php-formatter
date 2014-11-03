@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -80,6 +80,6 @@ class ConfigLoader
         return isset($configValues[$commandName])
             ? $configValues[$commandName]
             : $commandValue
-                ? : $defaultValue;
+                ?: $defaultValue;
     }
 }

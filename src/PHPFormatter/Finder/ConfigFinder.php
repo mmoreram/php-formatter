@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -37,7 +37,7 @@ class ConfigFinder
         $config = array();
         if (is_file($configFilePath)) {
 
-            $yamlParser = new YamlParser;
+            $yamlParser = new YamlParser();
             $config = $yamlParser->parse(file_get_contents($configFilePath));
         }
 
