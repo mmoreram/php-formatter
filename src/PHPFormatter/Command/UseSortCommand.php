@@ -79,6 +79,12 @@ class UseSortCommand extends Command
                 "Type of grouping"
             )
             ->addOption(
+                'group-skip-empty',
+                null,
+                InputOption::VALUE_NONE,
+                "Skip empty groups"
+            )
+            ->addOption(
                 '--config',
                 '-c',
                 InputOption::VALUE_OPTIONAL,
@@ -182,12 +188,14 @@ class UseSortCommand extends Command
             array(
                 'group' => $input->getOption('group'),
                 'group-type' => $input->getOption('group-type'),
+                'group-skip-empty' => $input->getOption('group-skip-empty'),
                 'sort-type' => $input->getOption('sort-type'),
                 'sort-direction' => $input->getOption('sort-direction')
             ),
             array(
                 'group' => array('_main'),
                 'group-type' => UseSorter::GROUP_TYPE_EACH,
+                'group-skip-empty' => false,
                 'sort-type' => UseSorter::SORT_TYPE_ALPHABETIC,
                 'sort-direction' => UseSorter::SORT_DIRECTION_ASC
             )
@@ -261,6 +269,11 @@ class UseSortCommand extends Command
             if (!empty($options['group-type'])) {
 
                 $output->writeln('#   --group-type="' . $options['group-type'] . '"');
+            }
+
+            if (!empty($options['group-skip-empty'])) {
+
+                $output->writeln('#   --group-skip-empty="' . $options['group-skip-empty'] . '"');
             }
 
             if (!empty($options['sort-type'])) {
@@ -344,6 +357,7 @@ class UseSortCommand extends Command
         $useSorter
             ->setGroups($options['group'])
             ->setGroupType($options['group-type'])
+            ->setGroupSkipEmpty($options['group-skip-empty'])
             ->setSortType($options['sort-type'])
             ->setSortDirection($options['sort-direction']);
 
