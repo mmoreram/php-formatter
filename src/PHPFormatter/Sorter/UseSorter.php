@@ -97,6 +97,13 @@ class UseSorter implements SorterInterface
     protected $groupType = self::GROUP_TYPE_EACH;
 
     /**
+     * @var boolean
+     *
+     * Skip empty groups
+     */
+    protected $groupSkipEmpty = false;
+
+    /**
      * Sets Groups
      *
      * @param array $groups Groups
@@ -151,6 +158,21 @@ class UseSorter implements SorterInterface
 
         return $this;
     }
+
+    /**
+     * Sets GroupSkipEmpty
+     *
+     * @param boolean $groupSkipEmpty
+     *
+     * @return UseSorter Self object
+     */
+    public function setGroupSkipEmpty($groupSkipEmpty)
+    {
+        $this->groupSkipEmpty = $groupSkipEmpty;
+
+        return $this;
+    }
+
 
     /**
      * Sort any piece of code given as parameter
@@ -208,6 +230,10 @@ class UseSorter implements SorterInterface
          * Every block is sorted as desired
          */
         foreach ($groups as $groupKey => $group) {
+            if ($this->groupSkipEmpty && empty($group)) {
+                unset($groups[$groupKey]);
+                continue;
+            }
 
             $groups[$groupKey] = $this->sortGroup($group);
         }
