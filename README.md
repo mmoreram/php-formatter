@@ -113,7 +113,7 @@ $ php-formatter formatter:use:sort src/ --config="src/"
 ## Commands
 
 PHP Formatter is a set of commands useful for your PHP projects. They do not
-consider any kind of Common Coding Standard, lke PSR-0 or PSR-1, is more like
+consider any kind of Common Coding Standard, like PSR-0 or PSR-1, is more like
 a useful way of working for developers and reviewers.
 
 ``` bash
