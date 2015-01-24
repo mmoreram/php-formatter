@@ -235,6 +235,17 @@ class UseSorter implements SorterInterface
                 continue;
             }
 
+            if (is_int($groupKey)) {
+                $subGroupSorted = array();
+                foreach ($group as $subGroupKey => $subGroup) {
+                    $subGroupSorted = array_merge($subGroupSorted, $this->sortGroup($subGroup));
+                }
+
+                $groups[$groupKey] = $subGroupSorted;
+            } else {
+                $groups[$groupKey] = $this->sortGroup($group);
+            }
+
             $groups[$groupKey] = $this->sortGroup($group);
         }
 
