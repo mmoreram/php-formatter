@@ -294,7 +294,75 @@ use Test4\\Myclass3;
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
 "
+            ),
+            array(
+                ['Test2', 'TestEmpty', '_main', 'Test3'],
+                UseSorter::SORT_TYPE_ALPHABETIC,
+                UseSorter::SORT_DIRECTION_ASC,
+                UseSorter::GROUP_TYPE_EACH,
+"
+use Test2\\Myclass3;
+use Test2\\Myclass4;
+
+
+
+use Test1\\Myclass1;
+use Test1\\Myclass2;
+use Test1\\MyFolder5\\File as MyFile;
+use Test4\\Myclass3;
+
+use Test3\\File;
+use Test3\\MyFolder\\Myclass;
+"
             )
+        );
+    }
+
+    /**
+     * Test skip empty
+     */
+    public function testGroupSkip()
+    {
+        $parsedData = $this
+            ->useSorter
+            ->setGroups(['Test2', 'TestEmpty', '_main', 'Test3'])
+            ->setSortType(UseSorter::SORT_TYPE_ALPHABETIC)
+            ->setSortDirection(UseSorter::SORT_DIRECTION_ASC)
+            ->setGroupType(UseSorter::GROUP_TYPE_EACH)
+            ->setGroupSkipEmpty(true)
+            ->sort($this->data);
+
+        $result =
+"
+use Test2\\Myclass3;
+use Test2\\Myclass4;
+
+use Test1\\Myclass1;
+use Test1\\Myclass2;
+use Test1\\MyFolder5\\File as MyFile;
+use Test4\\Myclass3;
+
+use Test3\\File;
+use Test3\\MyFolder\\Myclass;
+";
+        $realResult =
+            "<?php
+
+/**
+ * Copyright
+ */
+
+namespace PHPFormatter\\Tests\\Mocks;
+$result
+/**
+ * Class SimpleMock
+ */
+class SimpleMock
+{}";
+
+        $this->assertEquals(
+            $realResult,
+            $parsedData
         );
     }
 }
