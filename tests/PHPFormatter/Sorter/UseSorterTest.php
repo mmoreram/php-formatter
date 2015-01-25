@@ -314,7 +314,25 @@ use Test4\\Myclass3;
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
 "
-            )
+            ),
+            array(
+                ['Test2', ['Test1\MyFolder5', 'Test1'], '_main'],
+                UseSorter::SORT_TYPE_ALPHABETIC,
+                UseSorter::SORT_DIRECTION_ASC,
+                UseSorter::GROUP_TYPE_EACH,
+                "
+use Test2\\Myclass3;
+use Test2\\Myclass4;
+
+use Test1\\MyFolder5\\File as MyFile;
+use Test1\\Myclass1;
+use Test1\\Myclass2;
+
+use Test3\\File;
+use Test3\\MyFolder\\Myclass;
+use Test4\\Myclass3;
+"
+            ),
         );
     }
 

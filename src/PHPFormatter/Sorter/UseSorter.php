@@ -245,8 +245,6 @@ class UseSorter implements SorterInterface
             } else {
                 $groups[$groupKey] = $this->sortGroup($group);
             }
-
-            $groups[$groupKey] = $this->sortGroup($group);
         }
 
         $doubleEOL = PHP_EOL . PHP_EOL;
