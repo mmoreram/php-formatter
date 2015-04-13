@@ -235,7 +235,16 @@ class UseSorter implements SorterInterface
                 continue;
             }
 
-            $groups[$groupKey] = $this->sortGroup($group);
+            if (is_int($groupKey)) {
+                $subGroupSorted = array();
+                foreach ($group as $subGroupKey => $subGroup) {
+                    $subGroupSorted = array_merge($subGroupSorted, $this->sortGroup($subGroup));
+                }
+
+                $groups[$groupKey] = $subGroupSorted;
+            } else {
+                $groups[$groupKey] = $this->sortGroup($group);
+            }
         }
 
         $doubleEOL = PHP_EOL . PHP_EOL;
@@ -258,7 +267,15 @@ class UseSorter implements SorterInterface
      */
     private function createGroups(array $namespaces)
     {
-        $groups = array_fill_keys($this->groups, array());
+        $groups = array();
+
+        foreach ($this->groups as $group) {
+            if (is_array($group)) {
+                $groups[] = array_fill_keys($group, array());
+            } else {
+                $groups[$group] = array();
+            }
+        }
 
         if (!array_key_exists('_main', $groups)) {
 
@@ -272,8 +289,15 @@ class UseSorter implements SorterInterface
 
             foreach ($groups as $groupKey => $group) {
 
-                if (strpos($namespace, $groupKey) === 0) {
+                if (is_int($groupKey)) {
+                    foreach ($group as $subGroupKey => $subGroup) {
+                        if (strpos($namespace, $subGroupKey) === 0) {
+                            array_push($groups[$groupKey][$subGroupKey], $namespace);
 
+                            continue 3;
+                        }
+                    }
+                } elseif (is_string($groupKey) && strpos($namespace, $groupKey) === 0) {
                     array_push($groups[$groupKey], $namespace);
 
                     continue 2;
@@ -295,6 +319,10 @@ class UseSorter implements SorterInterface
      */
     private function sortGroup(array $group)
     {
+        if (empty($group)) {
+            return array();
+        }
+
         if ($this->sortType == self::SORT_TYPE_LENGTH) {
 
             usort($group, function ($a, $b) {

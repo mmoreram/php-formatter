@@ -141,7 +141,7 @@ formatter
 
 ### Sort all Use Statements
 
-You can sort your Use Statements in a very different ways. For this command you
+You can sort your Use Statements in different ways. For this command you
 must provide as an argument the path where to look for the PHP files you want to
 process.
 
@@ -164,12 +164,12 @@ $ php-formatter formatter:use:sort src/ --dry-run
 
 #### Group
 
-You can sort your Use statements using as many groups as yo want (***--group***).
+You can sort your Use statements using as many groups as you want (***--group***).
 It means that you can group lines with same root (***Symfony\\***) in a specific
 order.
 
 Common group is named `_main` and if is not specified, is placed in the
-begining. You can define where to place this group with `--group` option
+beginning. You can define where to place this group with the `--group` option
 
 ``` bash
 $ php-formatter formatter:use:sort src/ --group="Mmoreram" --group="_main" --group="Symfony"
@@ -191,6 +191,18 @@ use Symfony\AnotherClass;
 As you can see, a blank line is placed between groups. If any group is defined,
 one big group is created with all namespaces.
 
+When using a `.formatter.yml` you can also specify subgroups by entering an array
+
+``` yml
+use-sort:
+    group:
+        - [Symfony\Component\HttpKernel, Symfony]
+        - _main
+```
+
+This will create a Symfony group placing all `Symfony\Component\HttpKernel` classes on top.
+
+
 Finally, the `--group-type` defines if you want one `use` literal in every
 namespace line
 
@@ -210,7 +222,7 @@ use Mmoreram\MyClass;
 use Mmoreram\MySecondClass;
 ```
 
-or if you want only one use for all group.
+or if you want only one use for all groups.
 
 ``` bash
 $ php-formatter formatter:use:sort src/ --group="Mmoreram" --group-type="one"
@@ -302,7 +314,7 @@ use AnotherBundle\AnotherClass;
 
 ### Fix all PHP headers
 
-You can define your PHP header in your `.formatter.yml` file an this command
+You can define your PHP header in your `.formatter.yml` file and this command
 will check and fix that all PHP files have it properly.
 
 * command: `php-formatter formatter:header:fix`
@@ -311,7 +323,7 @@ will check and fix that all PHP files have it properly.
 
 #### Dry run
 
-You can use this tool just to test the files will be modified, using option
+You can use this tool just to test the files will be modified, using the option
 --dry-run
 
 ``` bash
