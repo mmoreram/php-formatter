@@ -47,7 +47,6 @@ class UseSorterTest extends PHPUnit_Framework_TestCase
         $this->data = file_get_contents(
             dirname(__FILE__) . '/../Mocks/SimpleMock.php.mock'
         );
-
     }
 
     /**
@@ -61,8 +60,7 @@ class UseSorterTest extends PHPUnit_Framework_TestCase
         $sortDirection,
         $groupType,
         $result
-    )
-    {
+    ) {
         $parsedData = $this
             ->useSorter
             ->setGroups($groups)
@@ -98,8 +96,8 @@ class SimpleMock
      */
     public function dataSort()
     {
-        return array(
-            array(
+        return [
+            [
                 [],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -113,9 +111,9 @@ use Test2\\Myclass4;
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
 use Test4\\Myclass3;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -129,9 +127,9 @@ use Test1\\Myclass1,
     Test3\\File,
     Test3\\MyFolder\\Myclass,
     Test4\\Myclass3;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_DESC,
@@ -145,9 +143,9 @@ use Test2\\Myclass3;
 use Test1\\MyFolder5\\File as MyFile;
 use Test1\\Myclass2;
 use Test1\\Myclass1;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_DESC,
@@ -161,9 +159,9 @@ use Test4\\Myclass3,
     Test1\\MyFolder5\\File as MyFile,
     Test1\\Myclass2,
     Test1\\Myclass1;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_DESC,
@@ -177,9 +175,9 @@ use Test2\\Myclass3;
 use Test1\\Myclass2;
 use Test1\\Myclass1;
 use Test3\\File;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_DESC,
@@ -193,9 +191,9 @@ use Test1\\MyFolder5\\File as MyFile,
     Test1\\Myclass2,
     Test1\\Myclass1,
     Test3\\File;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -209,9 +207,9 @@ use Test2\\Myclass4;
 use Test4\\Myclass3;
 use Test3\\MyFolder\\Myclass;
 use Test1\\MyFolder5\\File as MyFile;
-"
-            ),
-            array(
+",
+            ],
+            [
                 [],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -225,9 +223,9 @@ use Test3\\File,
     Test4\\Myclass3,
     Test3\\MyFolder\\Myclass,
     Test1\\MyFolder5\\File as MyFile;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['_main'],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -241,9 +239,9 @@ use Test3\\File,
     Test4\\Myclass3,
     Test3\\MyFolder\\Myclass,
     Test1\\MyFolder5\\File as MyFile;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['_main', 'Test2'],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -258,9 +256,9 @@ use Test3\\File,
 
 use Test2\\Myclass3,
     Test2\\Myclass4;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['Test2', '_main'],
                 UseSorter::SORT_TYPE_LENGTH,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -275,9 +273,9 @@ use Test3\\File,
     Test4\\Myclass3,
     Test3\\MyFolder\\Myclass,
     Test1\\MyFolder5\\File as MyFile;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['Test2', '_main', 'Test3'],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -293,9 +291,9 @@ use Test4\\Myclass3;
 
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['Test2', 'TestEmpty', '_main', 'Test3'],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -313,9 +311,9 @@ use Test4\\Myclass3;
 
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
-"
-            ),
-            array(
+",
+            ],
+            [
                 ['Test2', ['Test1\MyFolder5', 'Test1'], '_main'],
                 UseSorter::SORT_TYPE_ALPHABETIC,
                 UseSorter::SORT_DIRECTION_ASC,
@@ -331,9 +329,9 @@ use Test1\\Myclass2;
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
 use Test4\\Myclass3;
-"
-            ),
-        );
+",
+            ],
+        ];
     }
 
     /**

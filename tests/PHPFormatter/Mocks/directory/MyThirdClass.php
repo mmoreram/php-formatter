@@ -20,5 +20,4 @@ namespace Mmoreram\PHPFormatter\Tests\Mocks\Directory;
  */
 class MyThirdClass
 {
-
 }

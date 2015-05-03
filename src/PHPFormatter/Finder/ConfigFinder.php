@@ -34,14 +34,12 @@ class ConfigFinder
     public function findConfigFile($path)
     {
         $configFilePath = rtrim($path, '/') . '/' . PHPFormatter::CONFIG_FILE_NAME;
-        $config = array();
+        $config = [];
         if (is_file($configFilePath)) {
-
             $yamlParser = new YamlParser();
             $config = $yamlParser->parse(file_get_contents($configFilePath));
         }
 
         return $config;
     }
-
 }

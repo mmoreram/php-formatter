@@ -33,18 +33,17 @@ class ConfigFinderTest extends PHPUnit_Framework_TestCase
         $fileFinder = new ConfigFinder();
         $data = $fileFinder->findConfigFile($path);
 
-        $this->assertEquals($data, array(
-            'use-sort' => array(
-                'group' => array(
+        $this->assertEquals($data, [
+            'use-sort' => [
+                'group' => [
                     'Symfony',
                     '_main',
                     'Mmoreram',
-                ),
+                ],
                 'group-type' => 'each',
                 'sort-type' => 'alph',
                 'sort-direction' => 'desc',
-            )
-        ));
+            ],
+        ]);
     }
-
 }

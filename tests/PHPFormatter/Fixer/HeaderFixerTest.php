@@ -75,8 +75,8 @@ class HeaderFixerTest extends PHPUnit_Framework_TestCase
      */
     public function dataFix()
     {
-        return array(
-            array("<?php
+        return [
+            ["<?php
 
 /**
  * This file is part of the php-formatter package
@@ -89,8 +89,8 @@ class HeaderFixerTest extends PHPUnit_Framework_TestCase
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- */"        ),
-            array("<?php //comment
+ */"        ],
+            ["<?php //comment
 
 // This is my comment namespace hola
 
@@ -105,8 +105,8 @@ class HeaderFixerTest extends PHPUnit_Framework_TestCase
  * Another comment
  */
 
-"           ),
-            array("   <?php//Comment
+"           ],
+            ["   <?php//Comment
 // This is my comment namespace hola // #*/
 
 ## Some other commends namespace jaja */
@@ -120,7 +120,7 @@ class HeaderFixerTest extends PHPUnit_Framework_TestCase
  * Another comment
  */
 
-"           ),
-        );
+"           ],
+        ];
     }
 }
