@@ -73,7 +73,7 @@ class UseSorter implements SorterInterface
      *
      * Groups
      */
-    protected $groups = array();
+    protected $groups = [];
 
     /**
      * @var integer
@@ -173,7 +173,6 @@ class UseSorter implements SorterInterface
         return $this;
     }
 
-
     /**
      * Sort any piece of code given as parameter
      *
@@ -192,7 +191,7 @@ class UseSorter implements SorterInterface
 
         $result = $results[0];
         $blocks = explode(';', $result);
-        $namespaces = array();
+        $namespaces = [];
 
         foreach ($blocks as $block) {
 
@@ -236,7 +235,7 @@ class UseSorter implements SorterInterface
             }
 
             if (is_int($groupKey)) {
-                $subGroupSorted = array();
+                $subGroupSorted = [];
                 foreach ($group as $subGroupKey => $subGroup) {
                     $subGroupSorted = array_merge($subGroupSorted, $this->sortGroup($subGroup));
                 }
@@ -267,28 +266,25 @@ class UseSorter implements SorterInterface
      */
     private function createGroups(array $namespaces)
     {
-        $groups = array();
+        $groups = [];
 
         foreach ($this->groups as $group) {
             if (is_array($group)) {
-                $groups[] = array_fill_keys($group, array());
+                $groups[] = array_fill_keys($group, []);
             } else {
-                $groups[$group] = array();
+                $groups[$group] = [];
             }
         }
 
         if (!array_key_exists('_main', $groups)) {
-
             $groups = array_merge(
-                array('_main' => array()),
+                ['_main' => []],
                 $groups
             );
         }
 
         foreach ($namespaces as $namespace) {
-
             foreach ($groups as $groupKey => $group) {
-
                 if (is_int($groupKey)) {
                     foreach ($group as $subGroupKey => $subGroup) {
                         if (strpos($namespace, $subGroupKey) === 0) {
@@ -320,17 +316,15 @@ class UseSorter implements SorterInterface
     private function sortGroup(array $group)
     {
         if (empty($group)) {
-            return array();
+            return [];
         }
 
         if ($this->sortType == self::SORT_TYPE_LENGTH) {
-
             usort($group, function ($a, $b) {
 
                 $cmp = strlen($b) - strlen($a);
 
                 if ($cmp === 0) {
-
                     $a = strtolower($a);
                     $b = strtolower($b);
 
@@ -340,14 +334,12 @@ class UseSorter implements SorterInterface
                 return $cmp;
             });
         } elseif ($this->sortType == self::SORT_TYPE_ALPHABETIC) {
-
             usort($group, function ($a, $b) {
                 $a = strtolower($a);
                 $b = strtolower($b);
 
                 $cmp = strcmp($b, $a);
                 if ($cmp === 0) {
-
                     $cmp = strlen($b) - strlen($a);
                 }
 
@@ -356,7 +348,6 @@ class UseSorter implements SorterInterface
         }
 
         if ($this->sortDirection == self::SORT_DIRECTION_ASC) {
-
             $group = array_reverse($group);
         }
 
@@ -378,11 +369,9 @@ class UseSorter implements SorterInterface
                 return 'use ' . $namespace . ';';
             }, $group));
         } elseif ($this->groupType === self::GROUP_TYPE_ONE) {
-
             $group = implode(',' . PHP_EOL . '    ', $group);
 
             return 'use ' . $group . ';';
         }
     }
-
 }

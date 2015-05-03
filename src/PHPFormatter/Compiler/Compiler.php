@@ -90,8 +90,7 @@ class Compiler
         Phar $phar,
         SplFileInfo $file,
         $strip = true
-    )
-    {
+    ) {
         $path = strtr(str_replace(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $file->getRealPath()), '\\', '/');
         $content = file_get_contents($file);
         if ($strip) {
@@ -143,7 +142,7 @@ class Compiler
         foreach (token_get_all($source) as $token) {
             if (is_string($token)) {
                 $output .= $token;
-            } elseif (in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
                 $output .= str_repeat("\n", substr_count($token[1], "\n"));
             } elseif (T_WHITESPACE === $token[0]) {
                 // reduce wide spaces
@@ -213,7 +212,6 @@ EOF;
             ->in(realpath(__DIR__ . '/../../../src'));
 
         foreach ($finder as $file) {
-
             $this->addFile($phar, $file);
         }
 
@@ -243,7 +241,6 @@ EOF;
             ->in(realpath($vendorPath . 'symfony/'));
 
         foreach ($finder as $file) {
-
             $this->addFile($phar, $file);
         }
 
@@ -273,7 +270,6 @@ EOF;
             ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/ClassLoader.php'));
 
         if (file_exists($vendorPath . 'composer/include_paths.php')) {
-
             $this->addFile($phar, new \SplFileInfo($vendorPath . 'composer/include_paths.php'));
         }
 

@@ -30,16 +30,16 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
      *
      * Default values
      */
-    protected $defaultValues = array(
-        'group' => array(
+    protected $defaultValues = [
+        'group' => [
             'Symfony',
             '_main',
             'Mmoreram',
-        ),
+        ],
         'group-type' => 'each',
         'sort-type' => 'alph',
         'sort-direction' => 'desc',
-    );
+    ];
 
     /**
      * Test load config values
@@ -51,8 +51,7 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
         $commandValues,
         $defaultValues,
         $usableValues
-    )
-    {
+    ) {
         $configLoader = new ConfigLoader();
         $this->assertEquals(
             $usableValues,
@@ -72,81 +71,81 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function dataLoadConfigValues()
     {
-        return array(
-            array(
-                array(),
-                array(),
+        return [
+            [
+                [],
+                [],
                 $this->defaultValues,
                 $this->defaultValues,
-            ),
+            ],
 
-            array(
-                array(
-                    'use-sort' => array(
-                        'group' => array(
+            [
+                [
+                    'use-sort' => [
+                        'group' => [
                             'Doctrine',
                             'Elcodi',
-                        ),
+                        ],
                         'group-type' => 'one',
-                    )
-                ),
-                array(),
+                    ],
+                ],
+                [],
                 $this->defaultValues,
-                array(
-                    'group' => array(
+                [
+                    'group' => [
                         'Doctrine',
                         'Elcodi',
-                    ),
+                    ],
                     'group-type' => 'one',
                     'sort-type' => 'alph',
                     'sort-direction' => 'desc',
-                ),
-            ),
+                ],
+            ],
 
-            array(
-                array(
-                    'use-sort' => array(
-                        'group' => array(
+            [
+                [
+                    'use-sort' => [
+                        'group' => [
                             'Doctrine',
                             'Elcodi',
-                        ),
+                        ],
                         'group-type' => 'one',
-                    )
-                ),
-                array(
+                    ],
+                ],
+                [
                     'sort-type' => 'length',
                     'sort-direction' => 'asc',
-                ),
+                ],
                 $this->defaultValues,
-                array(
-                    'group' => array(
+                [
+                    'group' => [
                         'Doctrine',
                         'Elcodi',
-                    ),
+                    ],
                     'group-type' => 'one',
                     'sort-type' => 'length',
                     'sort-direction' => 'asc',
-                ),
-            ),
+                ],
+            ],
 
-            array(
-                array(),
-                array(
+            [
+                [],
+                [
                     'sort-type' => 'length',
                     'sort-direction' => 'asc',
-                ),
+                ],
                 $this->defaultValues,
-                array(
-                    'group' => array(
+                [
+                    'group' => [
                         'Symfony',
                         '_main',
                         'Mmoreram',
-                    ),
+                    ],
                     'group-type' => 'each',
                     'sort-type' => 'length',
                     'sort-direction' => 'asc',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

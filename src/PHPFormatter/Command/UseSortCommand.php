@@ -127,7 +127,6 @@ class UseSortCommand extends Command
         }
 
         if (!is_file($path) && !is_dir($path)) {
-
             throw new Exception('Directory or file "' . $path . '" does not exist');
         }
 
@@ -185,20 +184,20 @@ class UseSortCommand extends Command
         return $configLoader->loadConfigValues(
             self::COMMAND_NAME,
             $configFinder->findConfigFile($configPath),
-            array(
+            [
                 'group' => $input->getOption('group'),
                 'group-type' => $input->getOption('group-type'),
                 'group-skip-empty' => $input->getOption('group-skip-empty'),
                 'sort-type' => $input->getOption('sort-type'),
-                'sort-direction' => $input->getOption('sort-direction')
-            ),
-            array(
-                'group' => array('_main'),
+                'sort-direction' => $input->getOption('sort-direction'),
+            ],
+            [
+                'group' => ['_main'],
                 'group-type' => UseSorter::GROUP_TYPE_EACH,
                 'group-skip-empty' => false,
                 'sort-type' => UseSorter::SORT_TYPE_ALPHABETIC,
-                'sort-direction' => UseSorter::SORT_DIRECTION_ASC
-            )
+                'sort-direction' => UseSorter::SORT_DIRECTION_ASC,
+            ]
         );
     }
 
@@ -215,8 +214,7 @@ class UseSortCommand extends Command
         InputInterface $input,
         OutputInterface $output,
         $path
-    )
-    {
+    ) {
         $dryRun = $input->getOption('dry-run');
         $verbose = $output->getVerbosity();
 
@@ -224,12 +222,10 @@ class UseSortCommand extends Command
          * Dry-run message
          */
         if ($dryRun && $verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln('# This process has been executed in mode dry-run');
         }
 
         if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln('# Executing process in ' . $path);
         }
 
@@ -247,8 +243,7 @@ class UseSortCommand extends Command
     private function printConfigUsed(
         OutputInterface $output,
         array $options
-    )
-    {
+    ) {
         $verbose = $output->getVerbosity();
 
         /**
@@ -256,33 +251,26 @@ class UseSortCommand extends Command
          * file data, if is not empty.
          */
         if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln('# Executing process with this configuration');
             if (!empty($options['group'])) {
-
                 foreach ($options['group'] as $group) {
-
                     $output->writeln('#   --group="' . $group . '"');
                 }
             }
 
             if (!empty($options['group-type'])) {
-
                 $output->writeln('#   --group-type="' . $options['group-type'] . '"');
             }
 
             if (!empty($options['group-skip-empty'])) {
-
                 $output->writeln('#   --group-skip-empty="' . $options['group-skip-empty'] . '"');
             }
 
             if (!empty($options['sort-type'])) {
-
                 $output->writeln('#   --sort-type="' . $options['sort-type'] . '"');
             }
 
             if (!empty($options['sort-direction'])) {
-
                 $output->writeln('#   --sort-direction="' . $options['sort-direction'] . '"');
             }
         }
@@ -308,8 +296,7 @@ class UseSortCommand extends Command
         IteratorAggregate $files,
         array $options
 
-    )
-    {
+    ) {
         $dryRun = $input->getOption('dry-run');
         $verbose = $output->getVerbosity();
         $useSorter = $this->createUseSorter($options);
@@ -318,22 +305,18 @@ class UseSortCommand extends Command
          * Each found php file is processed
          */
         foreach ($files as $file) {
-
             $data = file_get_contents($file);
             $result = $useSorter->sort($data);
 
             if ($result === false || $data === $result) {
-
                 continue;
             }
 
             if ($verbose >= OutputInterface::VERBOSITY_NORMAL) {
-
                 $output->writeln('# ' . $file);
             }
 
             if (!$dryRun) {
-
                 file_put_contents($file, $result);
             }
         }

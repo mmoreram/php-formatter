@@ -39,13 +39,12 @@ class ConfigLoader
     public function loadConfigValues(
         $commandName,
         array $configValues,
-        array $commandValues = array(),
-        array $defaultValues = array()
-    )
-    {
+        array $commandValues = [],
+        array $defaultValues = []
+    ) {
         $configValues = isset($configValues[$commandName]) && is_array($configValues[$commandName])
             ? $configValues[$commandName]
-            : array();
+            : [];
 
         return array_merge(
             $defaultValues,
@@ -75,8 +74,7 @@ class ConfigLoader
         array $configValues,
         array $commandValue = null,
         array $defaultValue = null
-    )
-    {
+    ) {
         return isset($configValues[$commandName])
             ? $configValues[$commandName]
             : $commandValue

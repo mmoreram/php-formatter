@@ -101,7 +101,6 @@ class HeaderCommand extends Command
         );
 
         if (empty($header)) {
-
             throw new Exception('Header definition must be defined in .formatter.yml file under');
         }
 
@@ -114,7 +113,6 @@ class HeaderCommand extends Command
         }
 
         if (!is_file($path) && !is_dir($path)) {
-
             throw new Exception('Directory or file "' . $path . '" does not exist');
         }
 
@@ -122,12 +120,10 @@ class HeaderCommand extends Command
          * Dry-run message
          */
         if ($dryRun && $verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln('# This process has been executed in mode dry-run');
         }
 
         if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln('# Executing process in ' . $path);
         }
 
@@ -143,7 +139,6 @@ class HeaderCommand extends Command
          * file data, if is not empty.
          */
         if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-
             $output->writeln("# Header used:\n\n" . $header);
         }
 
@@ -153,22 +148,18 @@ class HeaderCommand extends Command
          * Each found php file is processed
          */
         foreach ($files as $file) {
-
             $data = file_get_contents($file);
             $result = $headerFixer->fix($data);
 
             if ($result === false || $data === $result) {
-
                 continue;
             }
 
             if ($verbose >= OutputInterface::VERBOSITY_NORMAL) {
-
                 $output->writeln('# ' . $file);
             }
 
             if (!$dryRun) {
-
                 file_put_contents($file, $result);
             }
         }
