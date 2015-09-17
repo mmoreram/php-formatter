@@ -1,16 +1,15 @@
 <?php
 
 /*
- * This file is part of the php-formatter package
+ * This file is part of MITRE's ACE project
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2015 MITRE Corporation
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Feel free to edit as you please, and have fun.
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @author MITRE's ACE Team <ace-team@mitre.org>
  */
 
 namespace Mmoreram\PHPFormatter\Finder;
@@ -32,11 +31,16 @@ class FileFinder
     public function findPHPFilesByPath($path)
     {
         $finder = new Finder();
-        $finder
-            ->files()
-            ->in($path)
-            ->name('*.php');
-
+        
+        if (file_exists($path) && !is_dir($path)) {
+            $finder->append([0 => $path]);
+        } else {
+            $finder
+                ->files()
+                ->in($path)
+                ->name('*.php');
+        }
+        
         return $finder;
     }
 }
