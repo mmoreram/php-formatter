@@ -32,11 +32,16 @@ class FileFinder
     public function findPHPFilesByPath($path)
     {
         $finder = new Finder();
-        $finder
-            ->files()
-            ->in($path)
-            ->name('*.php');
-
+        
+        if (file_exists($path) && !is_dir($path)) {
+            $finder->append([0 => $path]);
+        } else {
+            $finder
+                ->files()
+                ->in($path)
+                ->name('*.php');
+        }
+        
         return $finder;
     }
 }
