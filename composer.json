@@ -23,9 +23,12 @@
         "symfony/property-access": "^2.3|^3.0"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "1.4.2",
+        "fabpot/php-cs-fixer": "dev-SF3",
         "phpunit/phpunit": "^4.5"
     },
+    "repository": [
+        { "type": "vcs", "url": "https://github.com/Ener-Getick/PHP-CS-Fixer" } 
+    ],
     "bin": [
         "bin/php-formatter"
     ],
