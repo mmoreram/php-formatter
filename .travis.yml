@@ -31,7 +31,7 @@ before_install:
     - if [[ "$SYMFONY_VERSION" != "" ]]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
 
 install:
-    - composer install --prefer-source --no-interaction
+    - composer install --prefer-source --no-interaction -vvv
 
 script:
     - phpunit --coverage-text
