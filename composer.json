@@ -26,7 +26,7 @@
         "fabpot/php-cs-fixer": "dev-SF3",
         "phpunit/phpunit": "^4.5"
     },
-    "repository": [
+    "repositories": [
         { "type": "vcs", "url": "https://github.com/Ener-Getick/PHP-CS-Fixer" } 
     ],
     "bin": [
