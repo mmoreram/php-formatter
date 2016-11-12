@@ -229,11 +229,6 @@ class UseSorter implements SorterInterface
          * Every block is sorted as desired
          */
         foreach ($groups as $groupKey => $group) {
-            if ($this->groupSkipEmpty && empty($group)) {
-                unset($groups[$groupKey]);
-                continue;
-            }
-
             if (is_int($groupKey)) {
                 $subGroupSorted = [];
                 foreach ($group as $subGroupKey => $subGroup) {
@@ -243,6 +238,12 @@ class UseSorter implements SorterInterface
                 $groups[$groupKey] = $subGroupSorted;
             } else {
                 $groups[$groupKey] = $this->sortGroup($group);
+            }
+
+            //  Remove empty groups (if configured) after the sorting has happened.
+            //  @see https://github.com/mmoreram/php-formatter/issues/24
+            if ($this->groupSkipEmpty && (0 === count($groups[$groupKey]))) {
+                unset($groups[$groupKey]);
             }
         }
 
@@ -363,6 +364,9 @@ class UseSorter implements SorterInterface
      */
     private function renderGroup(array $group)
     {
+        if (empty($group)) {
+            return '';
+        }
         if ($this->groupType === self::GROUP_TYPE_EACH) {
             return implode(PHP_EOL, array_map(function ($namespace) {
 
