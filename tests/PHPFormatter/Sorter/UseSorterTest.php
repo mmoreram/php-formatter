@@ -331,6 +331,25 @@ use Test3\\MyFolder\\Myclass;
 use Test4\\Myclass3;
 ",
             ],
+            [
+                ['Test1', ['TestEmpty1', 'TestEmpty2'], '_main'],
+                UseSorter::SORT_TYPE_ALPHABETIC,
+                UseSorter::SORT_DIRECTION_ASC,
+                UseSorter::GROUP_TYPE_EACH,
+"
+use Test1\\Myclass1;
+use Test1\\Myclass2;
+use Test1\\MyFolder5\\File as MyFile;
+
+
+
+use Test2\\Myclass3;
+use Test2\\Myclass4;
+use Test3\\File;
+use Test3\\MyFolder\\Myclass;
+use Test4\\Myclass3;
+",
+            ],
         ];
     }
 
@@ -360,6 +379,55 @@ use Test4\\Myclass3;
 
 use Test3\\File;
 use Test3\\MyFolder\\Myclass;
+";
+        $realResult =
+            "<?php
+
+/**
+ * Copyright
+ */
+
+namespace PHPFormatter\\Tests\\Mocks;
+$result
+/**
+ * Class SimpleMock
+ */
+class SimpleMock
+{}";
+
+        $this->assertEquals(
+            $realResult,
+            $parsedData
+        );
+    }
+
+    /**
+     * Test skip empty where consecutive empty groups are between used groups.
+     *
+     * @see https://github.com/mmoreram/php-formatter/issues/24
+     */
+    public function testGroupSkipWithMissingGroups()
+    {
+        $parsedData = $this
+            ->useSorter
+            ->setGroups(['Test1', 'TestEmpty1', ['TestEmpty2', 'TestEmpty3'], '_main'])
+            ->setSortType(UseSorter::SORT_TYPE_ALPHABETIC)
+            ->setSortDirection(UseSorter::SORT_DIRECTION_ASC)
+            ->setGroupType(UseSorter::GROUP_TYPE_EACH)
+            ->setGroupSkipEmpty(true)
+            ->sort($this->data);
+
+        $result =
+"
+use Test1\\Myclass1;
+use Test1\\Myclass2;
+use Test1\\MyFolder5\\File as MyFile;
+
+use Test2\\Myclass3;
+use Test2\\Myclass4;
+use Test3\\File;
+use Test3\\MyFolder\\Myclass;
+use Test4\\Myclass3;
 ";
         $realResult =
             "<?php
