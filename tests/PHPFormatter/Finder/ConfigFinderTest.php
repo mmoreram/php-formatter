@@ -20,12 +20,12 @@ use PHPUnit_Framework_TestCase;
 use Mmoreram\PHPFormatter\Finder\ConfigFinder;
 
 /**
- * Class ConfigFinderTest
+ * Class ConfigFinderTest.
  */
 class ConfigFinderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test right load of config file
+     * Test right load of config file.
      */
     public function testFindConfigFileAndFound()
     {

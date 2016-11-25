@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,12 +20,12 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 use Mmoreram\PHPFormatter\PHPFormatter;
 
 /**
- * Class ConfigFinder
+ * Class ConfigFinder.
  */
 class ConfigFinder
 {
     /**
-     * Load, if exists, specific project configuration
+     * Load, if exists, specific project configuration.
      *
      * @param string $path Path
      *

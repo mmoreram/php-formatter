@@ -20,19 +20,33 @@ use PHPUnit_Framework_TestCase;
 use Mmoreram\PHPFormatter\Fixer\HeaderFixer;
 
 /**
- * Class HeaderFixerTest.
+ * Class HeaderWithStrictFixerTest.
  */
-class HeaderFixerTest extends PHPUnit_Framework_TestCase
+class HeaderWithStrictFixerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test fixer.
-     *
-     * @dataProvider dataFix
      */
-    public function testFix($data)
+    public function testFix()
     {
-        $header =
-'/**
+        $data = '<?php
+
+/**
+ * This file is part of the php-formatter package
+ *
+ * Copyright (c) 2014 Marc Morera
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
+ */
+
+declare(strict_types=1);';
+
+        $header = '/**
  * This file is part of the php-formatter package
  *
  * Copyright (c) 2014 Marc Morera
@@ -62,65 +76,12 @@ class HeaderFixerTest extends PHPUnit_Framework_TestCase
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-';
+declare(strict_types=1);';
 
         $headerFixer = new HeaderFixer($header);
         $fixedData = $headerFixer->fix($data);
+        $fixedData = $headerFixer->fix($fixedData);
 
         $this->assertEquals($fixedDataExpected, $fixedData);
-    }
-
-    /**
-     * Data for testFix.
-     */
-    public function dataFix()
-    {
-        return [
-            ['<?php
-
-/**
- * This file is part of the php-formatter package
- *
- * Copyright (c) 2014 Marc Morera
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */'],
-            ['<?php //comment
-
-// This is my comment namespace hola
-
-## Some other commends namespace jaja
-
-/*
-   * lalala
-     * namespace
-*/
-
-/**
- * Another comment
- */
-
-'],
-            ['   <?php//Comment
-// This is my comment namespace hola // #*/
-
-## Some other commends namespace jaja */
-
-/*
-   * lalala
-     * namespace //
-*/
-
-/**
- * Another comment
- */
-
-'],
-        ];
     }
 }

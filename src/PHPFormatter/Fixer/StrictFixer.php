@@ -18,25 +18,29 @@ namespace Mmoreram\PHPFormatter\Fixer;
 use Mmoreram\PHPFormatter\Fixer\Interfaces\FixerInterface;
 
 /**
- * Class HeaderFixer.
+ * Class StrictFixer.
  */
-class HeaderFixer implements FixerInterface
+class StrictFixer implements FixerInterface
 {
     /**
      * @var string
      *
-     * Header
+     * Strict
      */
-    protected $header;
+    protected $strict;
 
     /**
      * Construct method.
      *
-     * @param string $header Header
+     * @param bool $strict
      */
-    public function __construct($header)
+    public function __construct($strict)
     {
-        $this->header = '<?php' . rtrim("\n\n" . trim($header) . "\n\n") . "\n\n";
+        if (is_bool($strict)) {
+            $this->strict = $strict
+                ? 'declare(strict_types=1);'
+                : 'declare(strict_types=0);';
+        }
     }
 
     /**
@@ -48,15 +52,16 @@ class HeaderFixer implements FixerInterface
      */
     public function fix($data)
     {
-        $regex = '~(?P<group>^\s*<\?php(?:(?:(?:/\*.*?\*/)|(?:(?://|#).*?\n{1})|(?:\s*))*))(?P<other>.*)~s';
+        $regex = '~(?P<header>^\s*<\?php(?:(?:(?:/\*.*?\*/)|(?:(?://|#).*?\n{1})|(?:\s*))*))(?P<declare>\s*declare\(\s*strict_types\s*=\s*[01]{1}\s*\)\s*;\s*\n*)?(?P<other>.*)~s';
         preg_match($regex, $data, $results);
 
-        if (!isset($results['group'])) {
+        if (!isset($results['header'])) {
             return false;
         }
 
-        $other = $results['other'];
+        $header = $results['header'];
+        $other = isset($results['other']) ? $results['other'] : '';
 
-        return $this->header . ltrim($other);
+        return trim($header) . rtrim("\n\n" . $this->strict . "\n\n") . "\n\n" . ltrim($other);
     }
 }

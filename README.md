@@ -88,6 +88,7 @@ use-sort:
     sort-type: alph
     sort-direction: asc
 
+strict: ~
 header: |
     /*
      * This file is part of the php-formatter package
@@ -346,4 +347,30 @@ header: |
      *
      * @author Marc Morera <yuhu@mmoreram.com>
      */
+```
+
+### Fix all strict declarations
+
+In your >=7.0 PHP applications you can use simple type declarations in your
+methods. You can define your application as relaxed as you want by declaring the
+`strict_mode` variable in your files. Each php file must be configured itself,
+so in order to make sure all your files have the definition after the header if
+exists and before the namespace declaration, you can use this command.
+
+* command: `php-formatter formatter:strict:fix`
+* argument: path
+* option: --dry-run [***no value***]
+
+You can have three values here. If you define a boolean, then each file found
+will have the declaration with the boolean given.
+
+``` yml
+strict: true
+```
+
+Otherwise, if you define a '~' value then your declaration lines will be
+removed.
+
+``` yml
+strict: '~'
 ```

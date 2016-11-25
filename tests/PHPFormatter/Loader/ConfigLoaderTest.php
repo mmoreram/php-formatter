@@ -21,7 +21,7 @@ use Mmoreram\PHPFormatter\Command\UseSortCommand;
 use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 
 /**
- * Class ConfigLoaderTest
+ * Class ConfigLoaderTest.
  */
 class ConfigLoaderTest extends PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
     ];
 
     /**
-     * Test load config values
+     * Test load config values.
      *
      * @dataProvider dataLoadConfigValues
      */
@@ -65,7 +65,7 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * data for testLoadConfigValues
+     * data for testLoadConfigValues.
      *
      * @return array Values
      */

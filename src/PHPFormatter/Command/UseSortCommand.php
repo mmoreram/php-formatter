@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 use Mmoreram\PHPFormatter\Sorter\UseSorter;
 
 /**
- * Class UseSortCommand
+ * Class UseSortCommand.
  */
 class UseSortCommand extends Command
 {
@@ -42,7 +42,7 @@ class UseSortCommand extends Command
     const COMMAND_NAME = 'use-sort';
 
     /**
-     * configure
+     * configure.
      */
     protected function configure()
     {
@@ -58,49 +58,49 @@ class UseSortCommand extends Command
                 'group',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Groups defined?"
+                'Groups defined?'
             )
             ->addOption(
                 'sort-type',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Sort type"
+                'Sort type'
             )
             ->addOption(
                 'sort-direction',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Sort direction"
+                'Sort direction'
             )
             ->addOption(
                 'group-type',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Type of grouping"
+                'Type of grouping'
             )
             ->addOption(
                 'group-skip-empty',
                 null,
                 InputOption::VALUE_NONE,
-                "Skip empty groups"
+                'Skip empty groups'
             )
             ->addOption(
                 '--config',
                 '-c',
                 InputOption::VALUE_OPTIONAL,
-                "Config file directory",
+                'Config file directory',
                 getcwd()
             )
             ->addOption(
                 'dry-run',
                 null,
                 InputOption::VALUE_NONE,
-                "Just print the result, nothing is overwritten"
+                'Just print the result, nothing is overwritten'
             );
     }
 
     /**
-     * Execute command
+     * Execute command.
      *
      * @param InputInterface  $input  Input
      * @param OutputInterface $output Output
@@ -114,12 +114,12 @@ class UseSortCommand extends Command
         $path = $input->getArgument('path');
 
         /**
-         * We load the options to work with
+         * We load the options to work with.
          */
         $options = $this->getUsableConfig($input);
 
         /**
-         * Building the real directory or file to work in
+         * Building the real directory or file to work in.
          */
         $filesystem = new Filesystem();
         if (!$filesystem->isAbsolutePath($path)) {
@@ -130,7 +130,7 @@ class UseSortCommand extends Command
             throw new Exception('Directory or file "' . $path . '" does not exist');
         }
 
-        /**
+        /*
          * Print dry-run message if needed
          */
         $this->printDryRunMessage(
@@ -139,7 +139,7 @@ class UseSortCommand extends Command
             $path
         );
 
-        /**
+        /*
          * Print all configuration block if verbose level allows it
          */
         $this->printConfigUsed(
@@ -150,7 +150,7 @@ class UseSortCommand extends Command
         $fileFinder = new FileFinder();
         $files = $fileFinder->findPHPFilesByPath($path);
 
-        /**
+        /*
          * Parse and fix all found files
          */
         $this->parseAndFixFiles(
@@ -162,7 +162,7 @@ class UseSortCommand extends Command
     }
 
     /**
-     * Load config
+     * Load config.
      *
      * @param InputInterface $input Input
      *
@@ -202,7 +202,7 @@ class UseSortCommand extends Command
     }
 
     /**
-     * Print the Dry-run message if needed
+     * Print the Dry-run message if needed.
      *
      * @param InputInterface  $input  Input
      * @param OutputInterface $output Output
@@ -218,7 +218,7 @@ class UseSortCommand extends Command
         $dryRun = $input->getOption('dry-run');
         $verbose = $output->getVerbosity();
 
-        /**
+        /*
          * Dry-run message
          */
         if ($dryRun && $verbose >= OutputInterface::VERBOSITY_VERBOSE) {
@@ -233,7 +233,7 @@ class UseSortCommand extends Command
     }
 
     /**
-     * Print the configuration used by the command
+     * Print the configuration used by the command.
      *
      * @param OutputInterface $output  Output
      * @param array           $options Options used by the command
@@ -246,7 +246,7 @@ class UseSortCommand extends Command
     ) {
         $verbose = $output->getVerbosity();
 
-        /**
+        /*
          * If verbose level is higher or equal than -vv, we print the config
          * file data, if is not empty.
          */
@@ -281,7 +281,7 @@ class UseSortCommand extends Command
     }
 
     /**
-     * Parse and fix all files found
+     * Parse and fix all files found.
      *
      * @param InputInterface    $input   Input
      * @param OutputInterface   $output  Output
@@ -301,7 +301,7 @@ class UseSortCommand extends Command
         $verbose = $output->getVerbosity();
         $useSorter = $this->createUseSorter($options);
 
-        /**
+        /*
          * Each found php file is processed
          */
         foreach ($files as $file) {
@@ -325,7 +325,7 @@ class UseSortCommand extends Command
     }
 
     /**
-     * Create UseSorter Object given a configuration
+     * Create UseSorter Object given a configuration.
      *
      * @param array $options Options
      *
@@ -334,7 +334,7 @@ class UseSortCommand extends Command
     private function createUseSorter(array $options)
     {
         /**
-         * Creates the new UseSorter file, given config values
+         * Creates the new UseSorter file, given config values.
          */
         $useSorter = new UseSorter();
         $useSorter
