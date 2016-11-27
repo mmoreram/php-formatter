@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,12 +18,12 @@ namespace Mmoreram\PHPFormatter\Compiler;
 use DateTime;
 use Phar;
 use RuntimeException;
-use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 
 /**
- * Class Compiler
+ * Class Compiler.
  */
 class Compiler
 {
@@ -42,7 +42,7 @@ class Compiler
     protected $versionDate;
 
     /**
-     * Compiles composer into a single phar file
+     * Compiles composer into a single phar file.
      *
      * @throws RuntimeException
      */
@@ -57,7 +57,7 @@ class Compiler
         $this->loadVersion();
 
         /**
-         * Creating phar object
+         * Creating phar object.
          */
         $phar = new Phar($pharFilePath, 0, 'php-formatter.phar');
         $phar->setSignatureAlgorithm(\Phar::SHA1);
@@ -78,7 +78,7 @@ class Compiler
     }
 
     /**
-     * Add a file into the phar package
+     * Add a file into the phar package.
      *
      * @param Phar        $phar  Phar object
      * @param SplFileInfo $file  File to add
@@ -92,10 +92,10 @@ class Compiler
         $strip = true
     ) {
         $path = strtr(str_replace(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $file->getRealPath()), '\\', '/');
-        $content = file_get_contents($file);
+        $content = $file->getContents();
         if ($strip) {
             $content = $this->stripWhitespace($content);
-        } elseif ('LICENSE' === basename($file)) {
+        } elseif ('LICENSE' === $file->getBasename()) {
             $content = "\n" . $content . "\n";
         }
 
@@ -110,7 +110,7 @@ class Compiler
     }
 
     /**
-     * Add bin into Phar
+     * Add bin into Phar.
      *
      * @param Phar $phar Phar
      *
@@ -191,7 +191,7 @@ EOF;
     }
 
     /**
-     * Add php files
+     * Add php files.
      *
      * @param Phar $phar Phar instance
      *
@@ -200,7 +200,7 @@ EOF;
     private function addPHPFiles(Phar $phar)
     {
         /**
-         * All *.php files
+         * All *.php files.
          */
         $finder = new Finder();
         $finder
@@ -211,7 +211,7 @@ EOF;
             ->notName('ClassLoader.php')
             ->in(realpath(__DIR__ . '/../../../src'));
 
-        foreach ($finder as $file) {
+        foreach ($finder->files() as $file) {
             $this->addFile($phar, $file);
         }
 
@@ -219,7 +219,7 @@ EOF;
     }
 
     /**
-     * Add vendor files
+     * Add vendor files.
      *
      * @param Phar $phar Phar instance
      *
@@ -230,7 +230,7 @@ EOF;
         $vendorPath = __DIR__ . '/../../../vendor/';
 
         /**
-         * All *.php files
+         * All *.php files.
          */
         $finder = new Finder();
         $finder
@@ -248,7 +248,7 @@ EOF;
     }
 
     /**
-     * Add composer vendor files
+     * Add composer vendor files.
      *
      * @param Phar $phar Phar
      *
@@ -258,26 +258,26 @@ EOF;
     {
         $vendorPath = __DIR__ . '/../../../vendor/';
 
-        /**
+        /*
          * Adding composer vendor files
          */
         $this
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'autoload.php'))
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_namespaces.php'))
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_psr4.php'))
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_classmap.php'))
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/autoload_real.php'))
-            ->addFile($phar, new \SplFileInfo($vendorPath . 'composer/ClassLoader.php'));
+            ->addFile($phar, new SplFileInfo($vendorPath . 'autoload.php', $vendorPath, $vendorPath . 'autoload.php'))
+            ->addFile($phar, new SplFileInfo($vendorPath . 'composer/autoload_namespaces.php', $vendorPath . 'composer', $vendorPath . 'composer/autoload_namespaces.php'))
+            ->addFile($phar, new SplFileInfo($vendorPath . 'composer/autoload_psr4.php', $vendorPath . 'composer', $vendorPath . 'composer/autoload_psr4.php'))
+            ->addFile($phar, new SplFileInfo($vendorPath . 'composer/autoload_classmap.php', $vendorPath . 'composer', $vendorPath . 'composer/autoload_classmap.php'))
+            ->addFile($phar, new SplFileInfo($vendorPath . 'composer/autoload_real.php', $vendorPath . 'composer', $vendorPath . 'composer/autoload_real.php'))
+            ->addFile($phar, new SplFileInfo($vendorPath . 'composer/ClassLoader.php', $vendorPath . 'composer', $vendorPath . 'composer/ClassLoader.php'));
 
         if (file_exists($vendorPath . 'composer/include_paths.php')) {
-            $this->addFile($phar, new \SplFileInfo($vendorPath . 'composer/include_paths.php'));
+            $this->addFile($phar, new SplFileInfo($vendorPath . 'composer/include_paths.php', $vendorPath . 'composer', $vendorPath . 'composer/include_paths.php'));
         }
 
         return $this;
     }
 
     /**
-     * Add license
+     * Add license.
      *
      * @param Phar $phar Phar
      *
@@ -285,13 +285,13 @@ EOF;
      */
     private function addLicense(Phar $phar)
     {
-        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../../LICENSE'), false);
+        $this->addFile($phar, new SplFileInfo(__DIR__ . '/../../../LICENSE', __DIR__ . '/../../..', __DIR__ . '/../../../LICENSE'), false);
 
         return $this;
     }
 
     /**
-     * Load versions
+     * Load versions.
      */
     private function loadVersion()
     {

@@ -16,6 +16,7 @@
 namespace Mmoreram\PHPFormatter\Command;
 
 use Exception;
+use Mmoreram\PHPFormatter\Fixer\StrictFixer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,20 +26,19 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use Mmoreram\PHPFormatter\Finder\ConfigFinder;
 use Mmoreram\PHPFormatter\Finder\FileFinder;
-use Mmoreram\PHPFormatter\Fixer\HeaderFixer;
 use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 
 /**
- * Class HeaderCommand.
+ * Class StrictCommand.
  */
-class HeaderCommand extends Command
+class StrictCommand extends Command
 {
     /**
      * @var string
      *
      * Command name
      */
-    const COMMAND_NAME = 'header';
+    const COMMAND_NAME = 'strict';
 
     /**
      * configure.
@@ -46,8 +46,8 @@ class HeaderCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('formatter:header:fix')
-            ->setDescription('Ensures that all PHP files have the header defined in the config file')
+            ->setName('formatter:strict:fix')
+            ->setDescription('Ensures that all PHP files have strict mode defined in config file. Only valid for PHP7.0>')
             ->addArgument(
                 'path',
                 InputArgument::REQUIRED,
@@ -94,14 +94,15 @@ class HeaderCommand extends Command
          * $options array will have, after this block, all these values
          */
         $configPath = rtrim($input->getOption('config'), DIRECTORY_SEPARATOR);
+        $configInFile = $configFinder->findConfigFile($configPath);
 
-        $header = $configLoader->loadConfigValue(
+        $strict = $configLoader->loadConfigValue(
             self::COMMAND_NAME,
-            $configFinder->findConfigFile($configPath)
+            $configInFile
         );
 
-        if (empty($header)) {
-            throw new Exception('Header definition must be defined in .formatter.yml file under header');
+        if (!array_key_exists(self::COMMAND_NAME, $configInFile)) {
+            throw new Exception('Strict definition must be defined in .formatter.yml file under');
         }
 
         /**
@@ -128,9 +129,9 @@ class HeaderCommand extends Command
         }
 
         /**
-         * Creates the new HeaderFixer.
+         * Creates the new StrictFixer.
          */
-        $headerFixer = new HeaderFixer($header);
+        $strictFixer = new StrictFixer($strict);
 
         $files = $fileFinder->findPHPFilesByPath($path);
 
@@ -139,7 +140,7 @@ class HeaderCommand extends Command
          * file data, if is not empty.
          */
         if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln("# Header used:\n\n" . $header);
+            $output->writeln("# Strict used:\n\n" . $strict ? '1' : '0');
         }
 
         $output->writeln('#');
@@ -149,7 +150,7 @@ class HeaderCommand extends Command
          */
         foreach ($files as $file) {
             $data = $file->getContents();
-            $result = $headerFixer->fix($data);
+            $result = $strictFixer->fix($data);
 
             if ($result === false || $data === $result) {
                 continue;

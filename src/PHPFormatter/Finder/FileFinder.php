@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,12 +18,12 @@ namespace Mmoreram\PHPFormatter\Finder;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Class FileFinder
+ * Class FileFinder.
  */
 class FileFinder
 {
     /**
-     * Find all php files by path
+     * Find all php files by path.
      *
      * @param string $path Path
      *
@@ -32,7 +32,7 @@ class FileFinder
     public function findPHPFilesByPath($path)
     {
         $finder = new Finder();
-        
+
         if (file_exists($path) && !is_dir($path)) {
             $finder->append([0 => $path]);
         } else {
@@ -41,7 +41,7 @@ class FileFinder
                 ->in($path)
                 ->name('*.php');
         }
-        
+
         return $finder;
     }
 }

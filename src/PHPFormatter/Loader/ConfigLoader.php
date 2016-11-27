@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
 namespace Mmoreram\PHPFormatter\Loader;
 
 /**
- * Class ConfigLoader
+ * Class ConfigLoader.
  */
 class ConfigLoader
 {
@@ -77,7 +77,7 @@ class ConfigLoader
     ) {
         return isset($configValues[$commandName])
             ? $configValues[$commandName]
-            : $commandValue
-                ?: $defaultValue;
+            : ($commandValue
+                ?: $defaultValue);
     }
 }

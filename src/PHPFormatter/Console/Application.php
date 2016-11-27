@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,12 +20,12 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Mmoreram\PHPFormatter\Command;
 
 /**
- * Class Application
+ * Class Application.
  */
 class Application extends BaseApplication
 {
     /**
-     * Construct method
+     * Construct method.
      */
     public function __construct()
     {
@@ -42,13 +42,14 @@ class Application extends BaseApplication
     }
 
     /**
-     * Initializes all the composer commands
+     * Initializes all the composer commands.
      */
     protected function getDefaultCommands()
     {
         $commands = parent::getDefaultCommands();
         $commands[] = new Command\UseSortCommand();
         $commands[] = new Command\HeaderCommand();
+        $commands[] = new Command\StrictCommand();
 
         return $commands;
     }

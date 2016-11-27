@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,47 +18,47 @@ namespace Mmoreram\PHPFormatter\Sorter;
 use Mmoreram\PHPFormatter\Sorter\Interfaces\SorterInterface;
 
 /**
- * Class UseSorter
+ * Class UseSorter.
  */
 class UseSorter implements SorterInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * Sort type Alphabetic
      */
     const SORT_TYPE_ALPHABETIC = 'alph';
 
     /**
-     * @var integer
+     * @var int
      *
      * Sort type length
      */
     const SORT_TYPE_LENGTH = 'length';
 
     /**
-     * @var integer
+     * @var int
      *
      * Sort direction ascendent
      */
     const SORT_DIRECTION_ASC = 'asc';
 
     /**
-     * @var integer
+     * @var int
      *
      * Sort direction descendent
      */
     const SORT_DIRECTION_DESC = 'desc';
 
     /**
-     * @var integer
+     * @var int
      *
      * Group type one USE
      */
     const GROUP_TYPE_ONE = 'one';
 
     /**
-     * @var integer
+     * @var int
      *
      * Group type each USE
      */
@@ -76,35 +76,35 @@ class UseSorter implements SorterInterface
     protected $groups = [];
 
     /**
-     * @var integer
+     * @var int
      *
      * Sort type
      */
     protected $sortType = self::SORT_TYPE_ALPHABETIC;
 
     /**
-     * @var integer
+     * @var int
      *
      * Sort direction
      */
     protected $sortDirection = self::SORT_DIRECTION_ASC;
 
     /**
-     * @var integer
+     * @var int
      *
      * Group type
      */
     protected $groupType = self::GROUP_TYPE_EACH;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Skip empty groups
      */
     protected $groupSkipEmpty = false;
 
     /**
-     * Sets Groups
+     * Sets Groups.
      *
      * @param array $groups Groups
      *
@@ -118,7 +118,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sets SortDirection
+     * Sets SortDirection.
      *
      * @param mixed $sortDirection SortDirection
      *
@@ -132,7 +132,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sets SortType
+     * Sets SortType.
      *
      * @param mixed $sortType SortType
      *
@@ -146,7 +146,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sets GroupType
+     * Sets GroupType.
      *
      * @param int $groupType GroupType
      *
@@ -160,9 +160,9 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sets GroupSkipEmpty
+     * Sets GroupSkipEmpty.
      *
-     * @param boolean $groupSkipEmpty
+     * @param bool $groupSkipEmpty
      *
      * @return UseSorter Self object
      */
@@ -174,7 +174,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sort any piece of code given as parameter
+     * Sort any piece of code given as parameter.
      *
      * @param string $data Data
      *
@@ -196,7 +196,7 @@ class UseSorter implements SorterInterface
         foreach ($blocks as $block) {
 
             /**
-             * Removing use literal
+             * Removing use literal.
              */
             $block = trim(preg_replace('/^\s+use\s+/', '', $block));
 
@@ -207,25 +207,25 @@ class UseSorter implements SorterInterface
         }
 
         /**
-         * Trim all results of blank spaces and line breaks
+         * Trim all results of blank spaces and line breaks.
          */
         $namespaces = array_map(function ($namespace) {
             return trim($namespace);
         }, $namespaces);
 
         /**
-         * If any position becomes empty, removes
+         * If any position becomes empty, removes.
          */
         $namespaces = array_filter($namespaces, function ($namespace) {
             return !empty($namespace);
         });
 
         /**
-         * Grouping use statements by blocks defined in blocks variable
+         * Grouping use statements by blocks defined in blocks variable.
          */
         $groups = $this->createGroups($namespaces);
 
-        /**
+        /*
          * Every block is sorted as desired
          */
         foreach ($groups as $groupKey => $group) {
@@ -259,7 +259,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Create blocks
+     * Create blocks.
      *
      * @param array $namespaces Namespaces
      *
@@ -308,7 +308,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sort a group
+     * Sort a group.
      *
      * @param array $group Group to sort
      *
@@ -322,7 +322,6 @@ class UseSorter implements SorterInterface
 
         if ($this->sortType == self::SORT_TYPE_LENGTH) {
             usort($group, function ($a, $b) {
-
                 $cmp = strlen($b) - strlen($a);
 
                 if ($cmp === 0) {
@@ -356,7 +355,7 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Render a group
+     * Render a group.
      *
      * @param array $group Group
      *
@@ -369,7 +368,6 @@ class UseSorter implements SorterInterface
         }
         if ($this->groupType === self::GROUP_TYPE_EACH) {
             return implode(PHP_EOL, array_map(function ($namespace) {
-
                 return 'use ' . $namespace . ';';
             }, $group));
         } elseif ($this->groupType === self::GROUP_TYPE_ONE) {

@@ -20,12 +20,12 @@ use PHPUnit_Framework_TestCase;
 use Mmoreram\PHPFormatter\Finder\FileFinder;
 
 /**
- * Class FileFinderTest
+ * Class FileFinderTest.
  */
 class FileFinderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test php file finder
+     * Test php file finder.
      */
     public function testFindPHPFilesByPath()
     {
