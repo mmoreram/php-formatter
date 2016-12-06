@@ -1,0 +1,36 @@
+{
+    "algorithm": "SHA1",
+    "alias": "php-formatter.phar",
+    "banner": "This file is part of the php-formatter package\n\nCopyright (c) >=2014 Marc Morera\n\nFor the full copyright and license information, please view the LICENSE\nfile that was distributed with this source code.\n\nFeel free to edit as you please, and have fun.\n\n@author Marc Morera <yuhu@mmoreram.com>",
+    "chmod": "0755",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Json",
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "directories": "src",
+    "extract": true,
+    "files": [
+        "LICENSE",
+        "vendor/autoload.php",
+        "vendor/composer/installed.json",
+        "vendor/composer/LICENSE"
+    ],
+    "finder": [
+        {
+            "exclude": [
+                "tests",
+                "Tests"
+            ],
+            "in": [
+                "vendor/symfony",
+                "vendor/composer",
+                "vendor/paragonie"
+            ],
+            "name": "*.php"
+        }
+    ],
+    "git-version": "package_version",
+    "main": "bin/php-formatter",
+    "output": "build/php-formatter.phar",
+    "stub": true
+}

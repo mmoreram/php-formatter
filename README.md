@@ -41,14 +41,15 @@ $ cp build/php-formatter.phar /usr/local/bin/php-formatter
 
 ### Compile
 
-Finally you can also compile your own version of the package. ( You need set `phar.readonly = Off` in your php.ini ).
+Finally you can also compile your own version of the package. ( You need set 
+`phar.readonly = Off` in your php.ini ). For the compilation of this package you
+need the [box-project/box2](https://github.com/box-project/box2) library.
 
 ``` bash
 $ git clone git@github.com:mmoreram/php-formatter.git
 $ cd php-formatter
 $ composer update
-$ php bin/compile
-$ sudo chmod +x build/php-formatter.phar
+$ box build -v
 $ build/php-formatter.phar
 ```
 
