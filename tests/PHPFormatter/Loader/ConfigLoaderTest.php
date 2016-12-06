@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,11 +13,12 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Tests\Loader;
 
 use PHPUnit_Framework_TestCase;
 
-use Mmoreram\PHPFormatter\Command\UseSortCommand;
 use Mmoreram\PHPFormatter\Loader\ConfigLoader;
 
 /**
@@ -56,7 +57,7 @@ class ConfigLoaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $usableValues,
             $configLoader->loadConfigValues(
-                UseSortCommand::COMMAND_NAME,
+                'use-sort',
                 $configValues,
                 $commandValues,
                 $defaultValues

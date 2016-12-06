@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014-2016 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,8 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
+
+declare(strict_types=1);
 
 namespace Mmoreram\PHPFormatter\Fixer;
 
@@ -27,7 +29,7 @@ class HeaderFixer implements FixerInterface
      *
      * Header
      */
-    protected $header;
+    private $header;
 
     /**
      * Construct method.
@@ -40,11 +42,11 @@ class HeaderFixer implements FixerInterface
     }
 
     /**
-     * Fix any piece of code given as parameter.
+     * Do the fix. Return the fixed code or false if the code has not changed.
      *
-     * @param string $data Data
+     * @param string $data
      *
-     * @return string Data fixed
+     * @return string|false
      */
     public function fix($data)
     {
@@ -56,7 +58,10 @@ class HeaderFixer implements FixerInterface
         }
 
         $other = $results['other'];
+        $fixedData = $this->header . ltrim($other);
 
-        return $this->header . ltrim($other);
+        return $fixedData !== $data
+            ? $fixedData
+            : false;
     }
 }

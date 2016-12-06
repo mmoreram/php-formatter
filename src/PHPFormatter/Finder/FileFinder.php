@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014-2016 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,9 +13,12 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Finder;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class FileFinder.
@@ -25,12 +28,15 @@ class FileFinder
     /**
      * Find all php files by path.
      *
-     * @param string $path Path
+     * @param string   $path
+     * @param string[] $excludes
      *
-     * @return Finder Finder iterable object with all PHP found files in path
+     * @return Finder|SplFileInfo[]
      */
-    public function findPHPFilesByPath($path)
-    {
+    public function findPHPFilesByPath(
+        string $path,
+        array $excludes
+    ) {
         $finder = new Finder();
 
         if (file_exists($path) && !is_dir($path)) {
@@ -39,6 +45,7 @@ class FileFinder
             $finder
                 ->files()
                 ->in($path)
+                ->exclude($excludes)
                 ->name('*.php');
         }
 

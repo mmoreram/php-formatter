@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014-2016 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,32 +13,30 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Command;
 
-use Exception;
-use Mmoreram\PHPFormatter\Fixer\StrictFixer;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
-use Mmoreram\PHPFormatter\Finder\ConfigFinder;
-use Mmoreram\PHPFormatter\Finder\FileFinder;
-use Mmoreram\PHPFormatter\Loader\ConfigLoader;
+use Mmoreram\PHPFormatter\Fixer\Interfaces\FixerInterface;
+use Mmoreram\PHPFormatter\Fixer\StrictFixer;
 
 /**
  * Class StrictCommand.
  */
-class StrictCommand extends Command
+final class StrictCommand extends PHPFormatterCommand
 {
     /**
-     * @var string
+     * Get command alias for configuration.
      *
-     * Command name
+     * @return string
      */
-    const COMMAND_NAME = 'strict';
+    protected function getCommandConfigAlias() : string
+    {
+        return 'strict';
+    }
 
     /**
      * configure.
@@ -47,122 +45,59 @@ class StrictCommand extends Command
     {
         $this
             ->setName('formatter:strict:fix')
-            ->setDescription('Ensures that all PHP files have strict mode defined in config file. Only valid for PHP7.0>')
-            ->addArgument(
-                'path',
-                InputArgument::REQUIRED,
-                'Path'
-            )
-            ->addOption(
-                '--config',
-                '-c',
-                InputOption::VALUE_OPTIONAL,
-                'Config file directory',
-                getcwd()
-            )
-            ->addOption(
-                'dry-run',
-                null,
-                InputOption::VALUE_NONE,
-                'Just print the result, nothing is overwritten'
-            );
+            ->setDescription('Ensures that all PHP files have strict mode defined in config file. Only valid for >=PHP7.0');
+
+        parent::configure();
     }
 
     /**
-     * Execute command.
+     * Print used config.
      *
-     * @param InputInterface  $input  Input
-     * @param OutputInterface $output Output
-     *
-     * @return int|null|void
-     *
-     * @throws Exception
+     * @param OutputInterface $output
+     * @param mixed           $config
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function printUsableConfig(
+        OutputInterface $output,
+        $config
+    ) {
+        if (is_bool($config)) {
+            $output->writeln('# Adding strict_mode=' . ($config ? '1' : '0') . ' in your files');
+        } else {
+            $output->writeln('# Removing strict_mode from your files');
+        }
+    }
+
+    /**
+     * Get a fixer instance given the configuration.
+     *
+     * @param mixed $config
+     *
+     * @return FixerInterface
+     */
+    protected function getFixer($config) : FixerInterface
     {
-        $verbose = $output->getVerbosity();
-        $path = $input->getArgument('path');
-        $dryRun = $input->getOption('dry-run');
-        $fileFinder = new FileFinder();
-        $configLoader = new ConfigLoader();
-        $configFinder = new ConfigFinder();
+        return new StrictFixer($config);
+    }
 
-        /**
-         * This section is just for finding the right values to work with in
-         * this execution.
-         *
-         * $options array will have, after this block, all these values
-         */
-        $configPath = rtrim($input->getOption('config'), DIRECTORY_SEPARATOR);
-        $configInFile = $configFinder->findConfigFile($configPath);
+    /**
+     * Get command config values.
+     *
+     * @param InputInterface $input
+     *
+     * @return mixed
+     */
+    protected function getCommandConfigValue(InputInterface $input)
+    {
+        return null;
+    }
 
-        $strict = $configLoader->loadConfigValue(
-            self::COMMAND_NAME,
-            $configInFile
-        );
-
-        if (!array_key_exists(self::COMMAND_NAME, $configInFile)) {
-            throw new Exception('Strict definition must be defined in .formatter.yml file under');
-        }
-
-        /**
-         * Building the real directory or file to work in.
-         */
-        $filesystem = new Filesystem();
-        if (!$filesystem->isAbsolutePath($path)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
-        }
-
-        if (!is_file($path) && !is_dir($path)) {
-            throw new Exception('Directory or file "' . $path . '" does not exist');
-        }
-
-        /*
-         * Dry-run message
-         */
-        if ($dryRun && $verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln('# This process has been executed in mode dry-run');
-        }
-
-        if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln('# Executing process in ' . $path);
-        }
-
-        /**
-         * Creates the new StrictFixer.
-         */
-        $strictFixer = new StrictFixer($strict);
-
-        $files = $fileFinder->findPHPFilesByPath($path);
-
-        /*
-         * If verbose level is higher or equal than -vv, we print the config
-         * file data, if is not empty.
-         */
-        if ($verbose >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln("# Strict used:\n\n" . $strict ? '1' : '0');
-        }
-
-        $output->writeln('#');
-
-        /*
-         * Each found php file is processed
-         */
-        foreach ($files as $file) {
-            $data = $file->getContents();
-            $result = $strictFixer->fix($data);
-
-            if ($result === false || $data === $result) {
-                continue;
-            }
-
-            if ($verbose >= OutputInterface::VERBOSITY_NORMAL) {
-                $output->writeln('# ' . $file);
-            }
-
-            if (!$dryRun) {
-                file_put_contents($file->getRealPath(), $result);
-            }
-        }
+    /**
+     * Get default config values.
+     *
+     * @return mixed
+     */
+    protected function getDefaultConfigValue()
+    {
+        return null;
     }
 }

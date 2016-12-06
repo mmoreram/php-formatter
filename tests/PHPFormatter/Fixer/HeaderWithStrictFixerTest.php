@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) 2014-2016 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,8 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
+
+declare(strict_types=1);
 
 namespace Mmoreram\PHPFormatter\Tests\Fixer;
 
@@ -79,9 +81,6 @@ declare(strict_types=1);';
 declare(strict_types=1);';
 
         $headerFixer = new HeaderFixer($header);
-        $fixedData = $headerFixer->fix($data);
-        $fixedData = $headerFixer->fix($fixedData);
-
-        $this->assertEquals($fixedDataExpected, $fixedData);
+        $this->assertFalse($headerFixer->fix($data));
     }
 }

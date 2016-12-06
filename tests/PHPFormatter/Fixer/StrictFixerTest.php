@@ -1,12 +1,25 @@
 <?php
-/**
- * File header placeholder.
+
+/*
+ * This file is part of the php-formatter package
+ *
+ * Copyright (c) 2014-2016 Marc Morera
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
+
+declare(strict_types=1);
 
 namespace Mmoreram\PHPFormatter\Tests\Fixer;
 
-use Mmoreram\PHPFormatter\Fixer\StrictFixer;
 use PHPUnit_Framework_TestCase;
+
+use Mmoreram\PHPFormatter\Fixer\StrictFixer;
 
 /**
  * Class StrictFixerTest.
@@ -18,7 +31,7 @@ class StrictFixerTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider dataFix
      */
-    public function testFix($data, $withHeader, $strict)
+    public function testFix($data, $withHeader, $strict, $changes = true)
     {
         $fixedDataExpected =
 '<?php' . ($withHeader ? '
@@ -34,7 +47,11 @@ class StrictFixerTest extends PHPUnit_Framework_TestCase
         $strictFixer = new StrictFixer($strict);
         $fixedData = $strictFixer->fix($data);
 
-        $this->assertEquals($fixedDataExpected, $fixedData);
+        if ($changes) {
+            $this->assertEquals($fixedDataExpected, $fixedData);
+        } else {
+            $this->assertFalse($fixedData);
+        }
     }
 
     /**
@@ -51,37 +68,37 @@ class StrictFixerTest extends PHPUnit_Framework_TestCase
 
 declare(strict_types=1);
 
-namespace 'namespace';", true, true, ],
+namespace 'namespace';", true, true, false],
             ["<?php
 
 /**
  * Header
  */
 
-namespace 'namespace';", true, true, ],
-            ["<?php namespace 'namespace';", false, true, ],
+namespace 'namespace';", true, true],
+            ["<?php namespace 'namespace';", false, true],
             ["<?php
-     namespace 'namespace';", false, true, ],
+     namespace 'namespace';", false, true],
             ["<?php
-namespace 'namespace';", false, true, ],
+namespace 'namespace';", false, true],
             ["<?php
      declare(strict_types= 1);
-namespace 'namespace';", false, true, ],
+namespace 'namespace';", false, true],
             ["<?php
      declare(strict_types=0);
-namespace 'namespace';", false, true, ],
+namespace 'namespace';", false, true],
             ["<?php
 declare(strict_types=0);
-namespace 'namespace';", false, true, ],
-            ["<?php declare(strict_types=0); namespace 'namespace';", false, true, ],
+namespace 'namespace';", false, true],
+            ["<?php declare(strict_types=0); namespace 'namespace';", false, true],
             ["<?php
-namespace 'namespace';", false, false, ],
+namespace 'namespace';", false, false],
             ["<?php
      declare(strict_types= 1);
-namespace 'namespace';", false, false, ],
+namespace 'namespace';", false, false],
             ["<?php
      declare(strict_types=0);
-namespace 'namespace';", false, false, ],
+namespace 'namespace';", false, false],
             ["<?php
 
 /**
@@ -90,29 +107,29 @@ namespace 'namespace';", false, false, ],
 
 declare(strict_types=1);
 
-namespace 'namespace';", true, '~', ],
+namespace 'namespace';", true, '~'],
             ["<?php
 
 /**
  * Header
  */
 
-namespace 'namespace';", true, '~', ],
-            ["<?php namespace 'namespace';", false, '~', ],
+namespace 'namespace';", true, '~', false],
+            ["<?php namespace 'namespace';", false, '~'],
             ["<?php
-     namespace 'namespace';", false, '~', ],
+     namespace 'namespace';", false, '~'],
             ["<?php
-namespace 'namespace';", false, '~', ],
+namespace 'namespace';", false, '~'],
             ["<?php
      declare(strict_types= 1);
-namespace 'namespace';", false, '~', ],
+namespace 'namespace';", false, '~'],
             ["<?php
      declare(strict_types=0);
-namespace 'namespace';", false, '~', ],
+namespace 'namespace';", false, '~'],
             ["<?php
 declare(strict_types=0);
-namespace 'namespace';", false, '~', ],
-            ["<?php declare(strict_types=0); namespace 'namespace';", false, '~', ],
+namespace 'namespace';", false, '~'],
+            ["<?php declare(strict_types=0); namespace 'namespace';", false, '~'],
         ];
     }
 }

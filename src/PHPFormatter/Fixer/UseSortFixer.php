@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014-2016 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\PHPFormatter\Sorter;
+declare(strict_types=1);
 
-use Mmoreram\PHPFormatter\Sorter\Interfaces\SorterInterface;
+namespace Mmoreram\PHPFormatter\Fixer;
+
+use Mmoreram\PHPFormatter\Fixer\Interfaces\FixerInterface;
 
 /**
- * Class UseSorter.
+ * Class UseSortFixer.
  */
-class UseSorter implements SorterInterface
+final class UseSortFixer implements FixerInterface
 {
     /**
      * @var int
@@ -73,44 +75,44 @@ class UseSorter implements SorterInterface
      *
      * Groups
      */
-    protected $groups = [];
+    private $groups = [];
 
     /**
      * @var int
      *
      * Sort type
      */
-    protected $sortType = self::SORT_TYPE_ALPHABETIC;
+    private $sortType = self::SORT_TYPE_ALPHABETIC;
 
     /**
      * @var int
      *
      * Sort direction
      */
-    protected $sortDirection = self::SORT_DIRECTION_ASC;
+    private $sortDirection = self::SORT_DIRECTION_ASC;
 
     /**
      * @var int
      *
      * Group type
      */
-    protected $groupType = self::GROUP_TYPE_EACH;
+    private $groupType = self::GROUP_TYPE_EACH;
 
     /**
      * @var bool
      *
      * Skip empty groups
      */
-    protected $groupSkipEmpty = false;
+    private $groupSkipEmpty = false;
 
     /**
      * Sets Groups.
      *
-     * @param array $groups Groups
+     * @param array $groups
      *
-     * @return UseSorter Self object
+     * @return UseSortFixer
      */
-    public function setGroups($groups)
+    public function setGroups($groups) : UseSortFixer
     {
         $this->groups = $groups;
 
@@ -120,11 +122,11 @@ class UseSorter implements SorterInterface
     /**
      * Sets SortDirection.
      *
-     * @param mixed $sortDirection SortDirection
+     * @param mixed $sortDirection
      *
-     * @return UseSorter Self object
+     * @return UseSortFixer
      */
-    public function setSortDirection($sortDirection)
+    public function setSortDirection($sortDirection) : UseSortFixer
     {
         $this->sortDirection = $sortDirection;
 
@@ -134,11 +136,11 @@ class UseSorter implements SorterInterface
     /**
      * Sets SortType.
      *
-     * @param mixed $sortType SortType
+     * @param mixed $sortType
      *
-     * @return UseSorter Self object
+     * @return UseSortFixer
      */
-    public function setSortType($sortType)
+    public function setSortType($sortType) : UseSortFixer
     {
         $this->sortType = $sortType;
 
@@ -148,11 +150,11 @@ class UseSorter implements SorterInterface
     /**
      * Sets GroupType.
      *
-     * @param int $groupType GroupType
+     * @param int $groupType
      *
-     * @return UseSorter Self object
+     * @return UseSortFixer
      */
-    public function setGroupType($groupType)
+    public function setGroupType($groupType) : UseSortFixer
     {
         $this->groupType = $groupType;
 
@@ -164,9 +166,9 @@ class UseSorter implements SorterInterface
      *
      * @param bool $groupSkipEmpty
      *
-     * @return UseSorter Self object
+     * @return UseSortFixer
      */
-    public function setGroupSkipEmpty($groupSkipEmpty)
+    public function setGroupSkipEmpty($groupSkipEmpty) : UseSortFixer
     {
         $this->groupSkipEmpty = $groupSkipEmpty;
 
@@ -174,13 +176,13 @@ class UseSorter implements SorterInterface
     }
 
     /**
-     * Sort any piece of code given as parameter.
+     * Do the fix. Return the fixed code or false if the code has not changed.
      *
-     * @param string $data Data
+     * @param string $data
      *
-     * @return false|string Data processed or false if no use block has been found
+     * @return string|false
      */
-    public function sort($data)
+    public function fix($data)
     {
         $regex = '/(\s*(?:(?:\s+use\s+?[\w\\\\\,\s]+?;)+)\s+)/s';
         preg_match($regex, $data, $results);
@@ -242,20 +244,27 @@ class UseSorter implements SorterInterface
 
             //  Remove empty groups (if configured) after the sorting has happened.
             //  @see https://github.com/mmoreram/php-formatter/issues/24
-            if ($this->groupSkipEmpty && (0 === count($groups[$groupKey]))) {
+            if (0 === count($groups[$groupKey])) {
                 unset($groups[$groupKey]);
             }
         }
 
         $doubleEOL = PHP_EOL . PHP_EOL;
+        $spaceBetweenGroups = $this->groupSkipEmpty
+            ? PHP_EOL
+            : $doubleEOL;
 
-        $processedResult = $doubleEOL . trim(implode($doubleEOL, array_map(
+        $processedResult = $doubleEOL . trim(implode($spaceBetweenGroups, array_map(
                     function ($group) {
                         return $this->renderGroup($group);
                     }, $groups)
             )) . $doubleEOL;
 
-        return str_replace($result, $processedResult, $data);
+        $fixedData = str_replace($result, $processedResult, $data);
+
+        return $fixedData !== $data
+            ? $fixedData
+            : false;
     }
 
     /**
