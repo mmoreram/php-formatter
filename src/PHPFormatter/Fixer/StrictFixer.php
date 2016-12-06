@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Fixer;
 
 use Mmoreram\PHPFormatter\Fixer\Interfaces\FixerInterface;
@@ -20,14 +22,14 @@ use Mmoreram\PHPFormatter\Fixer\Interfaces\FixerInterface;
 /**
  * Class StrictFixer.
  */
-class StrictFixer implements FixerInterface
+final class StrictFixer implements FixerInterface
 {
     /**
      * @var string
      *
      * Strict
      */
-    protected $strict;
+    private $strict;
 
     /**
      * Construct method.
@@ -44,11 +46,11 @@ class StrictFixer implements FixerInterface
     }
 
     /**
-     * Fix any piece of code given as parameter.
+     * Do the fix. Return the fixed code or false if the code has not changed.
      *
-     * @param string $data Data
+     * @param string $data
      *
-     * @return string Data fixed
+     * @return string|false
      */
     public function fix($data)
     {
@@ -62,6 +64,10 @@ class StrictFixer implements FixerInterface
         $header = $results['header'];
         $other = isset($results['other']) ? $results['other'] : '';
 
-        return trim($header) . rtrim("\n\n" . $this->strict . "\n\n") . "\n\n" . ltrim($other);
+        $fixedData = trim($header) . rtrim("\n\n" . $this->strict . "\n\n") . "\n\n" . ltrim($other);
+
+        return $fixedData !== $data
+            ? $fixedData
+            : false;
     }
 }

@@ -1,20 +1,10 @@
-PHP Formatter
-=============
+# PHP Formatter
+
 [![Build Status](https://travis-ci.org/mmoreram/php-formatter.png?branch=master)](https://travis-ci.org/mmoreram/php-formatter)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mmoreram/php-formatter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mmoreram/php-formatter/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/mmoreram/php-formatter/v/stable.png)](https://packagist.org/packages/mmoreram/php-formatter)
-[![Latest Unstable Version](https://poser.pugx.org/mmoreram/php-formatter/v/unstable.png)](https://packagist.org/packages/mmoreram/php-formatter)
 
 This PHP formatter aims to provide you some bulk actions for you PHP projects to
 ensure their consistency. None of them fixes PSR rules. If you want to fix PSR
-rules, please check [fabpot/php-cs-fixer](https://github.com/fabpot/PHP-CS-Fixer).
-
-## Tags
-
-* Use last unstable version ( alias of `dev-master` ) to stay in last commit
-* Use last stable version tag to stay in a stable release.
-* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/php-formatter/v/unstable.png)](https://packagist.org/packages/mmoreram/php-formatter)
-[![Latest Stable Version](https://poser.pugx.org/mmoreram/php-formatter/v/stable.png)](https://packagist.org/packages/mmoreram/php-formatter)
+rules, please check [friendsofphp/php-cs-fixer](https://github.com/friendsofphp/PHP-CS-Fixer).
 
 ## Install
 
@@ -136,8 +126,9 @@ Available commands:
   help                   Displays help for a command
   list                   Lists commands
 formatter
-  formatter:header:fix   Ensures that all PHP files has header defined in config file
-  formatter:use:sort     Sort Use statements
+  formatter:header:fix  Ensures that all PHP files has header defined in config file
+  formatter:strict:fix  Ensures that all PHP files have strict mode defined in config file. Only valid for >=PHP7.0
+  formatter:use:sort    Sort Use statements
 ```
 
 ### Sort all Use Statements
@@ -148,20 +139,12 @@ process.
 
 * command: `php-formatter formatter:use:sort`
 * argument: path
+* option: --exclude [***multiple***]
 * option: --group [***multiple***]
 * option: --group-type=***one***|***each***
 * option: --sort-type=***alph***|***length***
 * option: --sort-direction=***asc***|***desc***
 * option: --dry-run [***no value***]
-
-#### Dry run
-
-You can use this tool just to test the files will be modified, using option
---dry-run
-
-``` bash
-$ php-formatter formatter:use:sort src/ --dry-run
-```
 
 #### Group
 
@@ -320,34 +303,8 @@ will check and fix that all PHP files have it properly.
 
 * command: `php-formatter formatter:header:fix`
 * argument: path
+* option: --exclude [***multiple***]
 * option: --dry-run [***no value***]
-
-#### Dry run
-
-You can use this tool just to test the files will be modified, using the option
---dry-run
-
-``` bash
-$ php-formatter formatter:header:fix src/ --dry-run
-```
-
-Your PHP Header definition must have this format.
-
-``` yml
-header: |
-    /*
-     * This file is part of the php-formatter package
-     *
-     * Copyright (c) 2014 Marc Morera
-     *
-     * For the full copyright and license information, please view the LICENSE
-     * file that was distributed with this source code.
-     *
-     * Feel free to edit as you please, and have fun.
-     *
-     * @author Marc Morera <yuhu@mmoreram.com>
-     */
-```
 
 ### Fix all strict declarations
 
@@ -359,6 +316,7 @@ exists and before the namespace declaration, you can use this command.
 
 * command: `php-formatter formatter:strict:fix`
 * argument: path
+* option: --exclude [***multiple***]
 * option: --dry-run [***no value***]
 
 You can have three values here. If you define a boolean, then each file found
@@ -374,3 +332,30 @@ removed.
 ``` yml
 strict: '~'
 ```
+
+## Exclude folders/files
+
+You can exclude folders and files by using the multi-option `--exclude` as many
+times as you need. This option works the same way the Symfony component
+[Finder](http://symfony.com/doc/current/components/finder.html) works, so to
+make sure you properly understand the way this option works, just check the
+documentation.
+
+``` bash
+$ php-formatter formatter:header:fix src/ --exclude="vendor"
+```
+
+In that case, maybe the most used way, you will exclude all vendors from your
+process.
+
+## Dry run
+
+You can use this tool just to test the files will be modified, using option
+--dry-run
+
+``` bash
+$ php-formatter formatter:use:sort src/ --dry-run
+```
+
+Any command from this library will never have any impact in your code as long as
+you have defined this option.

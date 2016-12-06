@@ -13,9 +13,11 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Finder;
 
-use Symfony\Component\Yaml\Parser as YamlParser;
+use Symfony\Component\Yaml\Yaml;
 
 use Mmoreram\PHPFormatter\PHPFormatter;
 
@@ -36,7 +38,7 @@ class ConfigFinder
         $configFilePath = rtrim($path, '/') . '/' . PHPFormatter::CONFIG_FILE_NAME;
         $config = [];
         if (is_file($configFilePath)) {
-            $yamlParser = new YamlParser();
+            $yamlParser = new Yaml();
             $config = $yamlParser->parse(file_get_contents($configFilePath));
         }
 

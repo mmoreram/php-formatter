@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Fixer\Interfaces;
 
 /**
@@ -21,11 +23,11 @@ namespace Mmoreram\PHPFormatter\Fixer\Interfaces;
 interface FixerInterface
 {
     /**
-     * Fix any piece of code given as parameter.
+     * Do the fix. Return the fixed code or false if the code has not changed.
      *
-     * @param string $data Data
+     * @param string $data
      *
-     * @return string Data fixed
+     * @return string|false
      */
     public function fix($data);
 }

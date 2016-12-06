@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\PHPFormatter\Loader;
 
 /**
@@ -29,28 +31,43 @@ class ConfigLoader
      * be used.
      * * Otherwise, default values will be used
      *
-     * @param string $commandName   Command called
-     * @param array  $configValues  Config values
-     * @param array  $commandValues Values defined in command
-     * @param array  $defaultValues Default values to use if these are not defined
+     * @param string $commandName
+     * @param mixed  $configValues
+     * @param mixed  $commandValues
+     * @param mixed  $defaultValues
      *
      * @return array $usableValues Usable values
+     *
+     * If none of these is defined, then return null
      */
     public function loadConfigValues(
         $commandName,
-        array $configValues,
-        array $commandValues = [],
-        array $defaultValues = []
+        $configValues,
+        $commandValues,
+        $defaultValues
     ) {
+        if (!is_array($defaultValues)) {
+            return $this->loadConfigValue(
+                $commandName,
+                $configValues,
+                $commandValues,
+                $defaultValues
+            );
+        }
+
         $configValues = isset($configValues[$commandName]) && is_array($configValues[$commandName])
             ? $configValues[$commandName]
             : [];
 
-        return array_merge(
+        $result = array_merge(
             $defaultValues,
-            array_filter($configValues),
-            array_filter($commandValues)
+            $configValues,
+            $commandValues
         );
+
+        return !empty($result)
+            ? $result
+            : null;
     }
 
     /**
@@ -62,22 +79,25 @@ class ConfigLoader
      * be used.
      * * Otherwise, default values will be used
      *
-     * @param string $commandName  Command called
-     * @param array  $configValues Config values
-     * @param array  $commandValue Value defined in command
-     * @param array  $defaultValue Default value to use if this is not defined
+     * If none of these is defined, then return null
      *
-     * @return array $usableValues Usable values
+     * @param string $commandName
+     * @param mixed  $configValue
+     * @param mixed  $commandValue
+     * @param mixed  $defaultValue
+     *
+     * @return mixed|null
      */
     public function loadConfigValue(
         $commandName,
-        array $configValues,
-        array $commandValue = null,
-        array $defaultValue = null
+        $configValue,
+        $commandValue,
+        $defaultValue
     ) {
-        return isset($configValues[$commandName])
-            ? $configValues[$commandName]
-            : ($commandValue
-                ?: $defaultValue);
+        return array_key_exists($commandName, $configValue)
+            ? ($configValue[$commandName] ?? '')
+            : (!is_null($commandValue)
+                ? $commandValue
+                : $defaultValue);
     }
 }

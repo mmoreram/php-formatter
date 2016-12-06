@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 function includeIfExists($file)
 {
     return file_exists($file) ? include $file : false;
