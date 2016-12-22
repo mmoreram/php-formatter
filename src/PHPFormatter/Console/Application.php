@@ -32,8 +32,8 @@ class Application extends BaseApplication
     public function __construct()
     {
         if (function_exists('ini_set') && extension_loaded('xdebug')) {
-            ini_set('xdebug.show_exception_trace', false);
-            ini_set('xdebug.scream', false);
+            ini_set('xdebug.show_exception_trace', '0');
+            ini_set('xdebug.scream', '0');
         }
 
         if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
