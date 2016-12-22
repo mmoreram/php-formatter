@@ -14,12 +14,14 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 require __DIR__ . '/../src/bootstrap.php';
 
 use Mmoreram\PHPFormatter\Console\Application;
 
 error_reporting(-1);
-ini_set('display_errors', 1);
+ini_set('display_errors', '1');
 
 // run the command application
 $application = new Application();
