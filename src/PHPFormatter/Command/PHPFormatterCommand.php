@@ -45,7 +45,7 @@ abstract class PHPFormatterCommand extends Command
         $this
             ->addArgument(
                 'path',
-                InputArgument::REQUIRED,
+                InputArgument::IS_ARRAY,
                 'Path'
             )
             ->addOption(
@@ -92,7 +92,7 @@ abstract class PHPFormatterCommand extends Command
                 ->printInitMessage(
                     $input,
                     $output,
-                    $path,
+                    implode('', $path),
                     $excludes
                 );
             $output->writeln('#');
@@ -218,7 +218,7 @@ abstract class PHPFormatterCommand extends Command
     /**
      * Load files to work with.
      *
-     * @param string $path
+     * @param array $path
      * @param array  $excludes
      *
      * @return Finder|SplFileInfo[]
@@ -226,28 +226,33 @@ abstract class PHPFormatterCommand extends Command
      * @throws Exception
      */
     protected function loadFiles(
-        string $path,
+        array $path,
         array $excludes
     ) {
         $fileFinder = new FileFinder();
 
-        /**
-         * Building the real directory or file to work in.
-         */
-        $filesystem = new Filesystem();
-        if (!$filesystem->isAbsolutePath($path)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . ltrim($path, '/');
+        foreach($path as $fileLocator) {
+            $fileLocator = rtrim($fileLocator,',');
+            /**
+             * Building the real directory or file to work in.
+             */
+            $filesystem = new Filesystem();
+            if (!$filesystem->isAbsolutePath($fileLocator)) {
+                $fileLocator = getcwd() . DIRECTORY_SEPARATOR . ltrim($fileLocator, '/');
+            }
+
+            if (!is_file($fileLocator) && !is_dir($fileLocator)) {
+                throw new Exception('Directory or file "' . $fileLocator . '" does not exist');
+            }
+
+            $fileFinder
+                ->findPHPFilesByPath(
+                    $fileLocator,
+                    $excludes
+                );
         }
 
-        if (!is_file($path) && !is_dir($path)) {
-            throw new Exception('Directory or file "' . $path . '" does not exist');
-        }
-
-        return $fileFinder
-            ->findPHPFilesByPath(
-                $path,
-                $excludes
-            );
+        return $fileFinder->getFinder();
     }
 
     /**
