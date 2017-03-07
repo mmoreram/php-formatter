@@ -31,7 +31,8 @@ class FileFinder
     /**
      * FileFinder constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->finder = new Finder();
     }
 

@@ -232,7 +232,7 @@ abstract class PHPFormatterCommand extends Command
         $fileFinder = new FileFinder();
 
         foreach($path as $fileLocator) {
-            $fileLocator = rtrim($fileLocator,',');
+            $fileLocator = rtrim($fileLocator, ',');
             /**
              * Building the real directory or file to work in.
              */
