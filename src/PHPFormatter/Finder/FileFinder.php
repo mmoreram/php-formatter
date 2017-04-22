@@ -25,6 +25,17 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class FileFinder
 {
+    /** @var Finder */
+    private $finder;
+
+    /**
+     * FileFinder constructor.
+     */
+    public function __construct()
+    {
+        $this->finder = new Finder();
+    }
+
     /**
      * Find all php files by path.
      *
@@ -37,18 +48,28 @@ class FileFinder
         string $path,
         array $excludes
     ) {
-        $finder = new Finder();
-
         if (file_exists($path) && !is_dir($path)) {
-            $finder->append([0 => $path]);
+            $splFile = new SplFileInfo(
+                realpath($path),
+                pathinfo($path)['dirname'],
+                $path);
+            $this->finder->append([0 => $splFile]);
         } else {
-            $finder
+            $this->finder
                 ->files()
                 ->in($path)
                 ->exclude($excludes)
                 ->name('*.php');
         }
 
-        return $finder;
+        return $this->finder;
+    }
+
+    /**
+     * @return Finder
+     */
+    public function getFinder()
+    {
+        return $this->finder;
     }
 }

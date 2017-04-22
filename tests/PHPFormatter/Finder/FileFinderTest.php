@@ -31,9 +31,10 @@ class FileFinderTest extends PHPUnit_Framework_TestCase
      */
     public function testFindPHPFilesByPath()
     {
-        $path = dirname(__FILE__) . '/../Mocks/';
+        $path = __DIR__ . '/../Mocks/';
         $fileFinder = new FileFinder();
         $this->assertCount(3, $fileFinder->findPHPFilesByPath($path, []));
+        $fileFinder = new FileFinder();
         $this->assertCount(2, $fileFinder->findPHPFilesByPath($path, ['directory']));
     }
 }
