@@ -2,15 +2,20 @@ language: php
 
 sudo: false
 
-php:
-    - 7.0
-    - 7.1
+matrix:
+    include:
+        - php: 7.0
+        - php: 7.1
+        - php: 7.2
+          env: deps=low
+    fast_finish: true
 
 install:
-    - composer update --prefer-source --no-interaction
+    - phpenv config-rm xdebug.ini
+    - if [[ $deps = low ]]; then composer update --prefer-lowest --prefer-stable; else composer install; fi
 
 script:
-    - vendor/bin/phpunit --coverage-text
+    - phpdbg -qrr vendor/bin/phpunit --coverage-text
 
 notifications:
     email: false
