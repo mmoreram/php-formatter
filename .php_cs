@@ -1,18 +1,20 @@
 <?php
 
-return Symfony\CS\Config\Config::create()
-    // use SYMFONY_LEVEL:
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
-    // and extra fixers:
-    ->fixers(array(
-        'concat_with_spaces',
-        'multiline_spaces_before_semicolon',
-        'short_array_syntax',
-        '-remove_lines_between_uses'
-    ))
-    ->finder(
-        Symfony\CS\Finder\DefaultFinder::create()
-            ->in('src/')
-            ->in('tests/')
-    )
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/src')
+    ->in(__DIR__.'/tests')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'concat_space' => ['spacing' => 'one'],
+        'no_multiline_whitespace_before_semicolons' => false,
+        'array_syntax' => ['syntax' => 'short'],
+        'yoda_style' => false,
+        'return_type_declaration' => ['space_before' => 'one'],
+        'self_accessor' => false,
+        'no_extra_consecutive_blank_lines' => false,
+    ])
+    ->setFinder($finder)
 ;
