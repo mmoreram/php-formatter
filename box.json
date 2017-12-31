@@ -23,8 +23,7 @@
             ],
             "in": [
                 "vendor/symfony",
-                "vendor/composer",
-                "vendor/paragonie"
+                "vendor/composer"
             ],
             "name": "*.php"
         }
